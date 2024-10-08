@@ -287,9 +287,234 @@ class CustomerController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ];
+        
         ShippingAddress::insert($address);
         return response()->json(['message' => translate('successfully added!')], 200);
     }
+
+    // public function order_note(Request $request){
+    //     if ($request->has('order_note')) {
+    //         session::put('order_note', $request['order_note']);
+    //     }
+    //     $addresscheck =  self::getPinCodeDetails($request);
+    //     if (!isset($addresscheck['delivery_codes']) || !is_array($addresscheck['delivery_codes']) || empty($addresscheck['delivery_codes'])) {
+    //         return response()->json(['status' => false, 'error' => translate('pincode not available')]);
+    //     }
+    //     if (!empty($addresscheck['delivery_codes'])) {
+    //         if (auth('customer')->id() != null) {
+    //             $shippingAddress = ShippingAddress::where('customer_id', auth('customer')->id())->first();
+    //             if($shippingAddress) {
+    //                 $shippingAddress->update([
+    //                     'zip' => $addresscheck['delivery_codes'][0]['postal_code']['pin'],
+    //                     'city' => $addresscheck['delivery_codes'][0]['postal_code']['city'],
+    //                     'country' => $addresscheck['delivery_codes'][0]['postal_code']['country_code'],
+    //                     'state' => $addresscheck['delivery_codes'][0]['postal_code']['state_code']
+    //                 ]);
+    //             } else {
+    //                 ShippingAddress::create([
+    //                     'customer_id' => auth('customer')->id(),
+    //                     'zip' => $addresscheck['delivery_codes'][0]['postal_code']['pin'],
+    //                     'city' => $addresscheck['delivery_codes'][0]['postal_code']['city'],
+    //                     'country' => $addresscheck['delivery_codes'][0]['postal_code']['country_code'],
+    //                     'state' => $addresscheck['delivery_codes'][0]['postal_code']['state_code']
+    //                 ]);
+    //             }
+    //         }
+    //         self::delivery_cost($addresscheck['delivery_codes'][0]['postal_code']['pin']);
+    //         $response = self::checkValidationForCheckoutPages($request);
+    //         return response()->json($response);
+    //     } else {
+    //         return response()->json(['status'=>false,'error'=>translate('Delivery Pincode Not Found')]);
+    //     }
+    // }
+
+
+    // public function getPinCodeDetails(Request $request){
+    //     $client = new Client();
+    //     $url = "https://track.delhivery.com/c/api/pin-codes/json/?filter_codes=" . $request->zip;
+    //     try {
+    //         $response = $client->request('GET', $url, [
+    //             'headers' => [
+    //                 'Content-Type' => 'application/json',
+    //                 'Authorization' => '298946431eb6b00835b0cf6aaaad8c9a4242c111',
+    //             ],
+    //             'verify' => false,
+    //         ]);
+
+    //         $data = json_decode($response->getBody(), true);
+
+    //         return $data;
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => $e->getMessage()], 500);
+    //     }
+    // }
+
+
+    // public function checkValidationForCheckoutPages(Request $request): array
+    // {
+    //     $response['status'] = 1;
+    //     $response['physical_product_view'] = false;
+    //     $message = [];
+
+    //     $verifyStatus = OrderManager::minimum_order_amount_verify($request);
+    //     if ($verifyStatus['status'] == 0) {
+    //         $response['status'] = 0;
+    //         $response['errorType'] = 'minimum-order-amount';
+    //         $response['redirect'] = route('shop-cart');
+    //         foreach ($verifyStatus['messages'] as $verifyStatusMessages) {
+    //             $message[] = $verifyStatusMessages;
+    //         }
+    //     }
+
+    //     $cartItemGroupIDsAll = CartManager::get_cart_group_ids();
+    //     $cartItemGroupIDs = CartManager::get_cart_group_ids(type: 'checked');
+    //     $shippingMethod = getWebConfig(name: 'shipping_method');
+
+    //     if (count($cartItemGroupIDsAll) <= 0) {
+    //         $response['status'] = 0;
+    //         $response['errorType'] = 'empty-cart';
+    //         $response['redirect'] = url('/');
+    //         $message[] = translate('no_items_in_basket');
+    //     } elseif (count($cartItemGroupIDs) <= 0) {
+    //         $response['status'] = 0;
+    //         $response['errorType'] = 'empty-shipping';
+    //         $response['redirect'] = route('shop-cart');
+    //         $message[] = translate('Please_add_or_checked_items_before_proceeding_to_checkout');
+    //     }
+
+    //     $unavailableVendorsStatus = 0;
+    //     $inhouseShippingMsgCount = 0;
+
+    //     $isPhysicalProductExist = false;
+    //     $productStockStatus = true;
+    //     foreach ($cartItemGroupIDs as $groupId) {
+    //         $isPhysicalProductExist = false;
+    //         $cartList = Cart::where(['cart_group_id' => $groupId, 'is_checked' => 1])->get();
+    //         foreach ($cartList as $cart) {
+    //             if ($cart->product_type == 'physical') {
+    //                 $isPhysicalProductExist = true;
+    //                 $response['physical_product_view'] = true;
+    //             }
+    //         }
+
+    //         $cartList = Cart::with('product')->groupBy('cart_group_id')->where(['cart_group_id' => $groupId, 'is_checked' => 1])->get();
+    //         $productStockCheck = CartManager::product_stock_check($cartList);
+    //         if (!$productStockCheck) {
+    //             $productStockStatus = false;
+    //         }
+
+    //         foreach ($cartList as $cartKey => $cart) {
+    //             if ($cartKey == 0) {
+    //                 if ($cart->seller_is == 'admin') {
+    //                     $inhouseTemporaryClose = getWebConfig(name: 'temporary_close') ? getWebConfig(name: 'temporary_close')['status'] : 0;
+    //                     $inhouseVacation = getWebConfig(name: 'vacation_add');
+    //                     $vacationStartDate = $inhouseVacation['vacation_start_date'] ? date('Y-m-d', strtotime($inhouseVacation['vacation_start_date'])) : null;
+    //                     $vacationEndDate = $inhouseVacation['vacation_end_date'] ? date('Y-m-d', strtotime($inhouseVacation['vacation_end_date'])) : null;
+    //                     $vacationStatus = $inhouseVacation['status'] ?? 0;
+    //                     if ($inhouseTemporaryClose || ($vacationStatus && (date('Y-m-d') >= $vacationStartDate) && (date('Y-m-d') <= $vacationEndDate))) {
+    //                         $unavailableVendorsStatus = 1;
+    //                     }
+    //                 } else {
+    //                     $sellerInfo = Seller::where('id', $cart->seller_id)->first();
+    //                     if (!$sellerInfo || $sellerInfo->status != 'approved') {
+    //                         $unavailableVendorsStatus = 1;
+    //                     }
+    //                     if (!isset($sellerInfo->shop) || ($sellerInfo->shop->temporary_close)) {
+    //                         $unavailableVendorsStatus = 1;
+    //                     }
+
+    //                     if ($sellerInfo && $sellerInfo->shop->vacation_status) {
+    //                         $vacationStartDate = $sellerInfo->shop->vacation_start_date ? date('Y-m-d', strtotime($sellerInfo->shop->vacation_start_date)) : null;
+    //                         $vacationEndDate = $sellerInfo->shop->vacation_end_date ? date('Y-m-d', strtotime($sellerInfo->shop->vacation_end_date)) : null;
+    //                         if ((date('Y-m-d') >= $vacationStartDate) && (date('Y-m-d') <= $vacationEndDate)) {
+    //                             $unavailableVendorsStatus = 1;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //         if ($isPhysicalProductExist) {
+    //             foreach ($cartList as $cart) {
+    //                 if ($shippingMethod == 'inhouse_shipping') {
+    //                     $adminShipping = ShippingType::where('seller_id', 0)->first();
+    //                     $shippingType = isset($adminShipping) ? $adminShipping->shipping_type : 'order_wise';
+    //                 } else {
+    //                     if ($cart->seller_is == 'admin') {
+    //                         $adminShipping = ShippingType::where('seller_id', 0)->first();
+    //                         $shippingType = isset($adminShipping) ? $adminShipping->shipping_type : 'order_wise';
+    //                     } else {
+    //                         $sellerShipping = ShippingType::where('seller_id', $cart->seller_id)->first();
+    //                         $shippingType = isset($sellerShipping) ? $sellerShipping->shipping_type : 'order_wise';
+    //                     }
+    //                 }
+
+    //                 if ($isPhysicalProductExist && $shippingType == 'order_wise') {
+    //                     $sellerShippingCount = 0;
+    //                     if ($shippingMethod == 'inhouse_shipping') {
+    //                         $sellerShippingCount = ShippingMethod::where(['status' => 1])->where(['creator_type' => 'admin'])->count();
+    //                         if ($sellerShippingCount <= 0 && isset($cart->seller->shop)) {
+    //                             $message[] = translate('shipping_Not_Available_for') . ' ' . getWebConfig(name: 'company_name');
+    //                             $response['status'] = 0;
+    //                             $response['redirect'] = route('shop-cart');
+    //                         }
+    //                     } else {
+    //                         if ($cart->seller_is == 'admin') {
+    //                             $sellerShippingCount = ShippingMethod::where(['status' => 1])->where(['creator_type' => 'admin'])->count();
+    //                             if ($sellerShippingCount <= 0 && isset($cart->seller->shop)) {
+    //                                 $message[] = translate('shipping_Not_Available_for') . ' ' . getWebConfig(name: 'company_name');
+    //                                 $response['status'] = 0;
+    //                                 $response['redirect'] = route('shop-cart');
+    //                             }
+    //                         } else if ($cart->seller_is == 'seller') {
+    //                             $sellerShippingCount = ShippingMethod::where(['status' => 1])->where(['creator_id' => $cart->seller_id, 'creator_type' => 'seller'])->count();
+    //                             if ($sellerShippingCount <= 0 && isset($cart->seller->shop)) {
+    //                                 $message[] = translate('shipping_Not_Available_for') . ' ' . $cart->seller->shop->name;
+    //                                 $response['status'] = 0;
+    //                                 $response['redirect'] = route('shop-cart');
+    //                             }
+    //                         }
+    //                     }
+
+    //                     if ($sellerShippingCount > 0 && $shippingMethod == 'inhouse_shipping' && $inhouseShippingMsgCount < 1) {
+    //                         $cartShipping = CartShipping::where('cart_group_id', $cart->cart_group_id)->first();
+    //                         if (!isset($cartShipping)) {
+    //                             $response['status'] = 0;
+    //                             $response['errorType'] = 'empty-shipping';
+    //                             $response['redirect'] = route('shop-cart');
+    //                             $message[] = translate('select_shipping_method');
+    //                         }
+    //                         $inhouseShippingMsgCount++;
+    //                     } elseif ($sellerShippingCount > 0 && $shippingMethod != 'inhouse_shipping') {
+    //                         $cartShipping = CartShipping::where('cart_group_id', $cart->cart_group_id)->first();
+    //                         if (!isset($cartShipping)) {
+    //                             $response['status'] = 0;
+    //                             $response['errorType'] = 'empty-shipping';
+    //                             $response['redirect'] = route('shop-cart');
+    //                             $shopIdentity = $cart->seller_is == 'admin' ? getWebConfig(name: 'company_name') : $cart->seller->shop->name;
+    //                             $message[] = translate('select') . ' ' . $shopIdentity . ' ' . translate('shipping_method');
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     if ($unavailableVendorsStatus) {
+    //         $message[] = translate('please_remove_all_products_from_unavailable_vendors');
+    //         $response['status'] = 0;
+    //         $response['redirect'] = route('shop-cart');
+    //     }
+
+    //     if (!$productStockStatus) {
+    //         $message[] = translate('Please_remove_this_unavailable_product_for_continue');
+    //         $response['status'] = 0;
+    //         $response['redirect'] = route('shop-cart');
+    //     }
+
+    //     $response['message'] = $message;
+    //     return $response ?? [];
+    // }
 
     public function update_address(Request $request): JsonResponse
     {

@@ -84,9 +84,8 @@
                 </button>
                 <a class="navbar-brand d-none d-sm-block mr-3 flex-shrink-0 __min-w-7rem"
                    href="{{route('home')}}">
-
                     <img class="__inline-11"
-                         src="{{asset('assets/back-end/company/').'/'.$web_config['web_logo']['key']}}"
+                         src="{{asset('assets/back-end/company/').'/'.$web_config['footer_logo']['key']}}"
                          alt="{{$web_config['name']->value}}">
                 </a>
                 <a class="navbar-brand d-sm-none"

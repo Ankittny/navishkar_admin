@@ -8621,4 +8621,5 @@ return [
 	"View More" => "View More",
 	"Some_items_were_not_added_to_your_cart_because_they_are_currently_unavailable_for_purchase.!" => "Some items were not added to your cart because they are currently unavailable for purchase.!",
 	"The image type must be.jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff,.webp" => "The image type must be.jpg  .png  .jpeg  .gif  .bmp  .tif  .tiff .webp",
+	"Order_not_found" => "Order not found",
 ];
