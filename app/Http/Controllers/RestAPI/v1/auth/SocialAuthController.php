@@ -32,7 +32,7 @@ class SocialAuthController extends Controller
         $token = $request['token'];
         $email = $request['email'];
         $unique_id = $request['unique_id'];
-
+        
         try {
             if ($request['medium'] == 'google') {
                 $res = $client->request('GET', 'https://www.googleapis.com/oauth2/v1/userinfo?access_token=' . $token);
