@@ -38,7 +38,8 @@ class BannerService
                 "Main Banner" => translate('main_Banner'),
                 "Popup Banner" => translate('popup_Banner'),
                 "Footer Banner" => translate('footer_Banner'),
-                "Main Section Banner" => translate('main_Section_Banner')
+                "Main Section Banner" => translate('main_Section_Banner'),
+                "OUR ACHIEVEMENTS" => translate('OUR ACHIEVEMENTS')
             ];
 
         }elseif (theme_root_path() == 'theme_aster') {
@@ -50,6 +51,7 @@ class BannerService
                 "Header Banner" => translate('header_Banner'),
                 "Sidebar Banner" => translate('sidebar_Banner'),
                 "Top Side Banner" => translate('top_Side_Banner'),
+                "OUR ACHIEVEMENTS" => translate('OUR ACHIEVEMENTS'),
             ];
         }elseif (theme_root_path() == 'theme_fashion') {
             $bannerTypes = [
@@ -60,6 +62,7 @@ class BannerService
                 "Promo Banner Middle Bottom" => translate('promo_banner_middle_bottom'),
                 "Promo Banner Right" => translate('promo_banner_right'),
                 "Promo Banner Bottom" => translate('promo_banner_bottom'),
+                "OUR ACHIEVEMENTS" => translate('OUR ACHIEVEMENTS'),
             ];
         }
 

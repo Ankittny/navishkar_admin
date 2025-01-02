@@ -12,16 +12,6 @@ use App\Http\Controllers\RestAPI\v1\SellerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\PaymentController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
- */
 
 Route::group(['namespace' => 'RestAPI\v1', 'prefix' => 'v1', 'middleware' => ['api_lang']], function () {
 
@@ -130,7 +120,7 @@ Route::group(['namespace' => 'RestAPI\v1', 'prefix' => 'v1', 'middleware' => ['a
                 Route::get('related-products/{product_id}', 'get_related_products');
                 Route::get('best-sellings', 'getBestSellingProducts');
                 Route::get('home-categories', 'get_home_categories');
-                Route::get('discounted-product', 'get_discounted_product');
+                Route::get('discounted-product', 'get_discounted_product'); 
                 Route::get('most-demanded-product', 'get_most_demanded_product');
                 Route::get('shop-again-product', 'get_shop_again_product')->middleware('auth:api');
                 Route::get('just-for-you', 'just_for_you');
