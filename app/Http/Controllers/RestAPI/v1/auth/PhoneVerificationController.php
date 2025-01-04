@@ -209,4 +209,37 @@ class PhoneVerificationController extends Controller
             ['message' => $message]
         ]], 403);
     }
+
+    public function send_otp(Request $request){
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::error_processor($validator)], 403);
+        }
+
+        $user = User::where(['phone' => $request['phone']])->first();
+        if(!empty($user)){
+            $user->phone = $request['phone'];
+            $user->save();
+        } else {
+            $user->phone = $request['phone'];
+            $user->save();
+        }
+
+        // if (isset($user)) {
+        //     $token = $user->createToken('LaravelAuthApp')->accessToken;
+        //     return response()->json([
+        //         'message' => translate('otp_sent'),
+        //         'token' => $token
+        //     ], 200);
+        // }
+    }
+
+
+    public function resend_otp($number){
+        
+    }
+
 }

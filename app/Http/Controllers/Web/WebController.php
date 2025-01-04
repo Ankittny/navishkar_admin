@@ -151,8 +151,8 @@ class WebController extends Controller
             'view' => view('web-views.partials._category-list-ajax', compact('category'))->render(),
         ]);
     }
-  
-  
+
+
    public function getAllIngredientsView(): View
     {
         $robotsMetaContentData = $this->robotsMetaContentRepo->getFirstWhere(params: ['page_name' => 'categories']);
@@ -174,8 +174,8 @@ class WebController extends Controller
             'robotsMetaContentData' => $robotsMetaContentData
         ]);
     }
-  
-  
+
+
 
     public function getAllBrandsView(Request $request): View|RedirectResponse
     {
@@ -336,7 +336,8 @@ class WebController extends Controller
             };
         }
 
-        return view(VIEW_FILE_NAMES['all_stores_page'], [
+        return view(VIEW_FILE_NAMES['all_stores_page
+        '], [
             'sellers' => $vendorsList->paginate(12)->appends($request->all()),
             'order_by' => $request['order_by'],
             'robotsMetaContentData' => $robotsMetaContentData,
@@ -1208,7 +1209,7 @@ class WebController extends Controller
       //  $response = self::checkValidationForCheckoutPages($request);
       //  return response()->json($response);
   //  }
-  
+
     public function order_note(Request $request){
         if ($request->has('order_note')) {
             session::put('order_note', $request['order_note']);
@@ -1218,13 +1219,13 @@ class WebController extends Controller
             return response()->json(['status' => false, 'error' => translate('pincode not available')]);
         }
         if (!empty($addresscheck['delivery_codes'])) {
-            if (auth('customer')->id() != null) {
+            if (auth('customer')->check()) {
                 $shippingAddress = ShippingAddress::where('customer_id', auth('customer')->id())->first();
                 if($shippingAddress) {
                     $shippingAddress->update([
                         'zip' => $addresscheck['delivery_codes'][0]['postal_code']['pin'],
                         'city' => $addresscheck['delivery_codes'][0]['postal_code']['city'],
-                        'country' => $addresscheck['delivery_codes'][0]['postal_code']['country_code'],
+                        'country' => "India",
                         'state' => $addresscheck['delivery_codes'][0]['postal_code']['state_code']
                     ]);
                 } else {
@@ -1232,19 +1233,31 @@ class WebController extends Controller
                         'customer_id' => auth('customer')->id(),
                         'zip' => $addresscheck['delivery_codes'][0]['postal_code']['pin'],
                         'city' => $addresscheck['delivery_codes'][0]['postal_code']['city'],
-                        'country' => $addresscheck['delivery_codes'][0]['postal_code']['country_code'],
+                        'country' => "India",
                         'state' => $addresscheck['delivery_codes'][0]['postal_code']['state_code']
                     ]);
                 }
             }
-            self::delivery_cost($addresscheck['delivery_codes'][0]['postal_code']['pin']);
+if (empty(auth('customer')->user())) {
+            $shippingAddress = ShippingAddress::updateOrCreate(
+                ['customer_id' => session('guest_id')],
+                [
+                    'zip' => $addresscheck['delivery_codes'][0]['postal_code']['pin'],
+                    'city' => $addresscheck['delivery_codes'][0]['postal_code']['city'],
+                    'country' => "India",
+                    'state' => $addresscheck['delivery_codes'][0]['postal_code']['state_code']
+                ]
+            );
+}
+
+            self::delivery_cost($addresscheck['delivery_codes'][0]['postal_code']['pin'],$addresscheck);
             $response = self::checkValidationForCheckoutPages($request);
             return response()->json($response);
         } else {
             return response()->json(['status'=>false,'error'=>translate('Delivery Pincode Not Found')]);
         }
     }
-  
+
 
     public function checkValidationForCheckoutPages(Request $request): array
     {
@@ -1378,7 +1391,7 @@ class WebController extends Controller
                                 $response['status'] = 0;
                                 $response['errorType'] = 'empty-shipping';
                                 $response['redirect'] = route('shop-cart');
-                                $message[] = translate('select_shipping_method');
+                               // $message[] = translate('select_shipping_method');
                             }
                             $inhouseShippingMsgCount++;
                         } elseif ($sellerShippingCount > 0 && $shippingMethod != 'inhouse_shipping') {
@@ -1794,7 +1807,7 @@ class WebController extends Controller
             'methodHtml' => view(VIEW_FILE_NAMES['pay_offline_method_list_partials'], compact('method'))->render(),
         ]);
     }
-  
+
      public function getPinCodeDetails(Request $request){
           $client = new Client();
           $url = "https://track.delhivery.com/c/api/pin-codes/json/?filter_codes=" . $request->zip;
@@ -1814,9 +1827,30 @@ class WebController extends Controller
               return response()->json(['error' => $e->getMessage()], 500);
           }
       }
-  
-  	public function delivery_cost($delivery_pincode){
-        $cartData = Cart::where('customer_id', auth('customer')->id())->get();
+
+  	public function delivery_cost($delivery_pincode,$addresscheck){
+        if(Auth::guard('customer')->check()){
+            $cartData = Cart::where('customer_id', auth('customer')->id())->get();
+        }else{
+            $cartData = Cart::where('customer_id', session('guest_id'))->get();
+            $shippingAddress = ShippingAddress::where('customer_id', auth('customer')->id())->first();
+                if($shippingAddress) {
+                    $shippingAddress->update([
+                        'zip' => $addresscheck['delivery_codes'][0]['postal_code']['pin'],
+                        'city' => $addresscheck['delivery_codes'][0]['postal_code']['city'],
+                        'country' => "India",
+                        'state' => $addresscheck['delivery_codes'][0]['postal_code']['state_code']
+                    ]);
+                } else {
+                    ShippingAddress::create([
+                        'customer_id' => auth('customer')->id(),
+                        'zip' => $addresscheck['delivery_codes'][0]['postal_code']['pin'],
+                        'city' => $addresscheck['delivery_codes'][0]['postal_code']['city'],
+                        'country' => "India",
+                        'state' => $addresscheck['delivery_codes'][0]['postal_code']['state_code']
+                    ]);
+                }
+        }
         if ($cartData->isEmpty()) {
             return response()->json(['error' => 'Cart is empty'], 404);
         }
@@ -1869,13 +1903,13 @@ class WebController extends Controller
                      return response()->json(['error' => 'Failed to fetch shipping cost'], 500);
             }
         }
-        
+
         $shipping = CartShipping::firstOrNew(['cart_group_id' => $groupid[0]]);
         $shipping->shipping_method_id = 9;
         $shipping->shipping_cost = $totalShippingCost;
         $shipping->save();
         return response()->json(['success' => 'Shipping cost calculated successfully', 'total_cost' => $totalShippingCost]);
     }
-  
+
 
 }

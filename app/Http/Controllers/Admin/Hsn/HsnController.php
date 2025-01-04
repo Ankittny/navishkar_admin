@@ -66,5 +66,9 @@ class HsnController extends Controller
             return redirect()->route('admin.hsn.list');
         }
     }
+    public function catIdData(Request $request) {
+        $data = Hsncode::select('category_id','hsn_code_under_gst')->where('category_id', $request->category_hsn_id)->get();
+        return response()->json($data);
+    }
     
 }

@@ -156,11 +156,11 @@ class CartController extends Controller
                 'productData' => $request->all(),
             ])->render();
         }
-        session()->forget('coupon_code');
-        session()->forget('coupon_type');
-        session()->forget('coupon_bearer');
-        session()->forget('coupon_discount');
-        session()->forget('coupon_seller_id');
+            session()->forget('coupon_code');
+            session()->forget('coupon_type');
+            session()->forget('coupon_bearer');
+            session()->forget('coupon_discount');
+            session()->forget('coupon_seller_id');
 
         if (isset($cart['redirect_to']) && $cart['redirect_to'] == 'checkout') {
             $cart['redirect_to_url'] = route('checkout-details');

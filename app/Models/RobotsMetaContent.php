@@ -57,6 +57,7 @@ class RobotsMetaContent extends Model
         'max_video_preview_value',
         'max_image_preview',
         'max_image_preview_value',
+      	'keywords',
     ];
 
     protected $casts = [
@@ -79,6 +80,7 @@ class RobotsMetaContent extends Model
         'max_video_preview_value' => 'string',
         'max_image_preview' => 'string',
         'max_image_preview_value' => 'string',
+      	'keywords'=> 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

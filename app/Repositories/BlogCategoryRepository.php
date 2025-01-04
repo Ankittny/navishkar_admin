@@ -2,14 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Repositories\HsnRepositoryInterface;
+use App\Contracts\Repositories\BlogCategoryInterface;
 use App\Http\Requests\Request;
-use App\Models\Hsncode;
+use App\Models\BlogCategory;
 
-class HsnRepository implements HsnRepositoryInterface
+class BlogCategoryRepository implements BlogCategoryInterface
 {
     public function __construct(
-       private readonly Hsncode $Hsncode
+       private readonly BlogCategory $Hsncode
     )
     {
     }
@@ -17,13 +17,13 @@ class HsnRepository implements HsnRepositoryInterface
     public function add(object $request): bool
     {
         $data = $request->only([
-            'hsn_code_under_gst',
-            'description',
-            'tax',
-          	'category_id',
+            'id',
+            'name',
+            'slug',
+            'created_at',
+          	'updated_at',
         ]);
-
-        $hsncode = new Hsncode();
+        $hsncode = new BlogCategory();
         $hsncode->fill($data);
         return $hsncode->save();
     }
@@ -33,22 +33,22 @@ class HsnRepository implements HsnRepositoryInterface
         // Extract only the relevant data from the request
         $data = $request->only([
             'id',
-            'hsn_code_under_gst',
-            'description',
-            'tax',
-            'category_id',
+            'name',
+            'slug',
+            'created_at',
+          	'updated_at',
         ]);
 
         // Find the Hsncode model by ID
-        $hsn = Hsncode::find($data['id']);
+        $hsn = BlogCategory::find($data['id']);
 
         if ($hsn) {
             // Update the Hsncode model with the new data
             return $hsn->update([
-                'hsn_code_under_gst' => $data['hsn_code_under_gst'],
-                'description' => $data['description'],
-                'tax' => $data['tax'],
-              	'category_id' => $data['category_id'],
+                'name' => $data['name'],
+                'slug' => $data['slug'],
+              	'created_at' => now(),
+                'updated_at'=>now()
             ]);
         }
 
@@ -73,8 +73,8 @@ class HsnRepository implements HsnRepositoryInterface
     }
     public function delete(object $request): bool
     {
-        $id = $request->input('hsnId');
-        $hsn = Hsncode::find($id); 
+        $id = $request->input('blogId');
+        $hsn = BlogCategory::find($id); 
        
         if (!$hsn) {
             return false; 
