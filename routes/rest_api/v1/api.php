@@ -34,6 +34,9 @@ Route::group(['namespace' => 'RestAPI\v1', 'prefix' => 'v1', 'middleware' => ['a
 
         Route::post('social-login', 'SocialAuthController@social_login');
         Route::post('update-phone', 'SocialAuthController@update_phone');
+
+        Route::post('send-otp','PhoneVerificationController@send_otp');
+        Route::post('otp-verify','PhoneVerificationController@verify_otp');
     });
 
     Route::group(['prefix' => 'config'], function () {
@@ -120,7 +123,7 @@ Route::group(['namespace' => 'RestAPI\v1', 'prefix' => 'v1', 'middleware' => ['a
                 Route::get('related-products/{product_id}', 'get_related_products');
                 Route::get('best-sellings', 'getBestSellingProducts');
                 Route::get('home-categories', 'get_home_categories');
-                Route::get('discounted-product', 'get_discounted_product'); 
+                Route::get('discounted-product', 'get_discounted_product');
                 Route::get('most-demanded-product', 'get_most_demanded_product');
                 Route::get('shop-again-product', 'get_shop_again_product')->middleware('auth:api');
                 Route::get('just-for-you', 'just_for_you');

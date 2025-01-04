@@ -8624,4 +8624,6 @@ return [
 	"Order_not_found" => "Order not found",
 	"Feature key field is required." => "Feature key field is required.",
 	"OUR ACHIEVEMENTS" => "OUR ACHIEVEMENTS",
+	"otp_sent" => "Otp sent",
+	"otp_not_sent" => "Otp not sent",
 ];
