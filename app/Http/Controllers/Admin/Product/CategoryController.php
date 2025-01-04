@@ -16,7 +16,7 @@ use App\Services\ProductService;
 use App\Traits\PaginatorTrait;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\JsonResponse; 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -29,7 +29,7 @@ class CategoryController extends BaseController
 
     public function __construct(
         private readonly CategoryRepositoryInterface        $categoryRepo,
-        private readonly ProductRepositoryInterface        $productRepo,
+        private readonly ProductRepositoryInterface         $productRepo,
         private readonly ProductService        $productService,
         private readonly TranslationRepositoryInterface     $translationRepo,
     )
@@ -59,12 +59,36 @@ class CategoryController extends BaseController
         ]);
     }
 
+    public function getIngredientsView(Request $request): View
+    {
+        $categories = $this->categoryRepo->getListWhere(orderBy: ['id'=>'desc'], searchValue: $request->get('searchValue'), filters: ['position' => 0, 'organic_status' => 1], dataLimit: getWebConfig(name: 'pagination_limit'));
+        $languages = getWebConfig(name: 'pnc_language') ?? null;
+        $defaultLanguage = $languages[0];
+        return view(Category::INGREDIENTS[VIEW], [
+            'categories' => $categories,
+            'languages' => $languages,
+            'defaultLanguage' => $defaultLanguage,
+        ]);
+    }
+
     public function getUpdateView(string|int $id): View|RedirectResponse
     {
         $category = $this->categoryRepo->getFirstWhere(params:['id'=>$id], relations: ['translations']);
         $languages = getWebConfig(name: 'pnc_language') ?? null;
         $defaultLanguage = $languages[0];
         return view(Category::UPDATE[VIEW], [
+            'category' => $category,
+            'languages' => $languages,
+            'defaultLanguage' => $defaultLanguage,
+        ]);
+    }
+
+    public function getIngredientUpdateView(string|int $id): View|RedirectResponse
+    {
+        $category = $this->categoryRepo->getFirstWhere(params:['id'=>$id], relations: ['translations']);
+        $languages = getWebConfig(name: 'pnc_language') ?? null;
+        $defaultLanguage = $languages[0];
+        return view(Category::INGREDIENTUPDATE[VIEW], [
             'category' => $category,
             'languages' => $languages,
             'defaultLanguage' => $defaultLanguage,

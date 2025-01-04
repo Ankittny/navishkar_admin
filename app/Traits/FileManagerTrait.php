@@ -8,7 +8,7 @@ use Intervention\Image\Facades\Image;
 
 trait FileManagerTrait
 {
-    /**
+    /** 
      * Upload method working for image
      * @param string $dir
      * @param string $format

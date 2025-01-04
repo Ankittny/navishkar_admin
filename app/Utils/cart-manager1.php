@@ -55,8 +55,7 @@ class CartManager
             })
             ->when($type == 'checked', function ($query) {
                 return $query->where(['is_checked' => 1]);
-            })
-            ->get();
+            })->get();
     }
 
     public static function get_cart_for_api($request, $groupId = null, $type = null)
@@ -163,7 +162,6 @@ class CartManager
                     }
                 }
             }
-
             return $amount;
 
         }

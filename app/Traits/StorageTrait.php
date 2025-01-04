@@ -29,7 +29,7 @@ trait StorageTrait
             if ($this->fileCheck(disk: 'public', path: $path . '/' . $data) && !empty($data) && file_exists($fullPath)) {
                 return [
                     'key' => $data,
-                    'path' => url('assets/back-end/' . $path . '/' . $data),
+                    'path' => url('public/assets/back-end/' . $path . '/' . $data),
                     'status' => 200,
                 ];
             }
@@ -37,7 +37,7 @@ trait StorageTrait
 
         return [
             'key' => $data,
-            'path' => url('assets/back-end/' . $path . '/' . $data),
+            'path' => url('public/assets/back-end/' . $path . '/' . $data),
             'status' => 200,
         ];
     }

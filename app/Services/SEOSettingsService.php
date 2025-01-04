@@ -43,6 +43,7 @@ class SEOSettingsService
             "page_name" => $request['page_name'],
             "meta_title" => $request['meta_title'],
             "meta_description" => $request['meta_description'],
+          	"keywords"=>  $request['keywords'],
             "canonicals_url" => $request['canonicals_url'],
             "index" => $request['meta_index'] ? '' : 'noindex',
             "no_follow" => $request['meta_no_follow'] ? 'nofollow' : '',

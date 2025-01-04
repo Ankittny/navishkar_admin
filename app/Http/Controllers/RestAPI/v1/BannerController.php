@@ -19,8 +19,7 @@ class BannerController extends Controller
                 'Main Banner',
                 'Footer Banner',
                 'Popup Banner',
-                'Main Section Banner',
-                'OUR ACHIEVEMENTS'
+                'Main Section Banner'
             ),
             'theme_aster' => array(
                 'Main Banner',
@@ -29,8 +28,7 @@ class BannerController extends Controller
                 'Header Banner',
                 'Sidebar Banner',
                 'Top Side Banner',
-                'Main Section Banner',
-                'OUR ACHIEVEMENTS',
+                'Main Section Banner'
             ),
             'theme_fashion' => array(
                 'Main Banner',
@@ -41,8 +39,7 @@ class BannerController extends Controller
                 'Promo Banner Middle Top',
                 'Promo Banner Middle Bottom',
                 'Promo Banner Right',
-                'Promo Banner Bottom',
-                'OUR ACHIEVEMENTS',
+                'Promo Banner Bottom'
             ),
         };
 

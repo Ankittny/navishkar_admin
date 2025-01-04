@@ -27,5 +27,9 @@ enum Hsn
         URI => 'delete',
         VIEW => ''
     ];
+  	const CATID = [
+        URI => 'catIdData',
+        VIEW => ''
+    ];
    
 }

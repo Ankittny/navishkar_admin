@@ -232,10 +232,6 @@ class ProductController extends Controller
         })->where('home_status', true)->get();
         $categories->map(function ($data) use ($request) {
             $data['products'] = Helpers::product_data_formatting(CategoryManager::products($data['id'], $request), true);
-            $data['childes'] = $data->childes->map(function($child) use ($request) {
-                $child['products'] = Helpers::product_data_formatting(CategoryManager::products($child['id'], $request), true);
-                return $child;
-            });
             return $data;
         });
         return response()->json($categories, 200);

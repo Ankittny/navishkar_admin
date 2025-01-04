@@ -56,9 +56,8 @@ class PassportAuthController extends Controller
         if ($email_verification && !$user->is_email_verified) {
             return response()->json(['temporary_token' => $temporary_token], 200);
         }
-        
+
         $token = $user->createToken('LaravelAuthApp')->accessToken;
-        
         return response()->json(['token' => $token], 200);
     }
 
@@ -198,7 +197,7 @@ class PassportAuthController extends Controller
             $errors[] = ['code' => 'auth-001', 'message' => translate('credentials_doesnt_match')];
             return response()->json([
                 'errors' => $errors
-            ], 401);   
+            ], 401);
         }
     }
 

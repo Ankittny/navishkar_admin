@@ -42,11 +42,11 @@ class ProductListController extends Controller
             'theme_all_purpose' => self::theme_all_purpose($request),
         };
     }
-  
+
      public function ingredients(Request $request){
 
           $ingredients_ids = [$request->id];
-          $categoris = Category::where('id', $request->id)->select('id', 'name','icon','description')->first();
+          $categoris = Category::where('id', $request->id)->select('id', 'name','icon','description','content_writing_area')->first();
 
           $product = Product::whereRaw("JSON_CONTAINS(`ingredients_id`, json_array(?))", [$ingredients_ids[0]] )->get();
           // dd($product,$categoris);
@@ -204,7 +204,11 @@ class ProductListController extends Controller
                 $productListData = $productListData->sortByDesc('name');
             }
         }
-
+    if (!is_null($request->min_price) || !is_null($request->max_price)) {
+        $minPrice = Helpers::convert_currency_to_usd($request->min_price);
+        $maxPrice = Helpers::convert_currency_to_usd($request->max_price);
+        $productListData = $productListData->whereBetween('unit_price', [$minPrice, $maxPrice]);
+    }
         $products = $productListData->paginate(20)->appends($data);
 
         if ($request->ajax()) {

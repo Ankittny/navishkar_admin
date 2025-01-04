@@ -316,7 +316,6 @@ class CartManager
         $price = 0;
         $string = '';
         $variations = [];
-
         $user = Helpers::get_customer($request);
         $guestId = session('guest_id') ?? ($request->guest_id ?? 0);
 
@@ -456,40 +455,50 @@ class CartManager
                     if (!isset($shipping)) {
                         $shipping = new CartShipping();
                     }
-                    //dd($request['pin_code']);
-                    // $getShippingCost = ShippingMethod::find($request['shipping_method_id']);
-                    $getShippingCost = self::getPinCodeDetails($request['pin_code']);
-                    //dd($getShippingCost);
-                    if(!empty($getShippingCost['delivery_codes'])){
-                        if (auth('customer')->id() != null) {
-                            $shippingAddress = ShippingAddress::where('customer_id', auth('customer')->id())->first();
-                            if($shippingAddress) {
-                                $shippingAddress->update([
-                                    'zip' => $getShippingCost['delivery_codes'][0]['postal_code']['pin'],
-                                    'city' => $getShippingCost['delivery_codes'][0]['postal_code']['city'],
-                                    'country' => $getShippingCost['delivery_codes'][0]['postal_code']['country_code'],
-                                    'state' => $getShippingCost['delivery_codes'][0]['postal_code']['state_code']
-                                ]);
-                            } else {
-                                ShippingAddress::create([
-                                    'customer_id' => auth('customer')->id(),
-                                    'zip' => $getShippingCost['delivery_codes'][0]['postal_code']['pin'],
-                                    'city' => $getShippingCost['delivery_codes'][0]['postal_code']['city'],
-                                    'country' => $getShippingCost['delivery_codes'][0]['postal_code']['country_code'],
-                                    'state' => $getShippingCost['delivery_codes'][0]['postal_code']['state_code']
-                                ]);
-                            }
 
-                            self::delivery_cost($getShippingCost['delivery_codes'][0]['postal_code']['pin']);
+                    // $getShippingCost = ShippingMethod::find($request['shipping_method_id']);
+                    if(!empty($request['pin_code'])){
+                        $getShippingCost = self::getPinCodeDetails($request['pin_code']);
+                        if(!empty($getShippingCost['delivery_codes'])){
+                            if (auth('customer')->id() != null) {
+                                $shippingAddress = ShippingAddress::where('customer_id', auth('customer')->id())->first();
+                                if($shippingAddress) {
+                                    $shippingAddress->update([
+                                        'zip' => $getShippingCost['delivery_codes'][0]['postal_code']['pin'],
+                                        'city' => $getShippingCost['delivery_codes'][0]['postal_code']['city'],
+                                        'country' => $getShippingCost['delivery_codes'][0]['postal_code']['country_code'],
+                                        'state' => $getShippingCost['delivery_codes'][0]['postal_code']['state_code']
+                                    ]);
+                                } else {
+                                    ShippingAddress::create([
+                                        'customer_id' => auth('customer')->id(),
+                                        'zip' => $getShippingCost['delivery_codes'][0]['postal_code']['pin'],
+                                        'city' => $getShippingCost['delivery_codes'][0]['postal_code']['city'],
+                                        'country' => $getShippingCost['delivery_codes'][0]['postal_code']['country_code'],
+                                        'state' => $getShippingCost['delivery_codes'][0]['postal_code']['state_code']
+                                    ]);
+                                }
+                                self::delivery_cost($getShippingCost['delivery_codes'][0]['postal_code']['pin']);
+                            }
+                        } else {
+                            return ['status' => 0, 'message' => translate('Selected_shipping_method_not_found')];
                         }
-                    } else {
-                        return ['status' => 0, 'message' => translate('Selected_shipping_method_not_found')];
+                    }
+                    // dd($request->all());
+                    if($request->buy_now==1){
+                        $shipping['cart_group_id'] = $cart['cart_group_id'];
+                        $shipping['shipping_method_id'] = $request['shipping_method_id'];
+                        $shipping['shipping_cost'] = $getShippingCost->cost ?? 0;
+                        $shipping->save();
                     }
 
-                    //$shipping['cart_group_id'] = $cart['cart_group_id'];
-                    //$shipping['shipping_method_id'] = $request['shipping_method_id'];
-                    //$shipping['shipping_cost'] = $getShippingCost->cost ?? 0;
-                    //$shipping->save();
+                    if($request->buy_now==1){
+                        $shipping = new CartShipping();
+                        $shipping->cart_group_id = $cart['cart_group_id'];
+                        $shipping->shipping_method_id = 9;
+                        $shipping->shipping_cost = 0;
+                        $shipping->save();
+                    }
 
                     $cart['free_delivery_order_amount'] = OrderManager::free_delivery_order_amount($cart['cart_group_id']);
 
@@ -633,7 +642,6 @@ class CartManager
     public static function add_to_cart($request, $from_api = false): array
     {
         $product = Product::with(['digitalVariation'])->where(['id' => $request['id']])->first();
-
         $shippingMethod = Helpers::get_business_settings('shipping_method');
         $adminShipping = ShippingType::where('seller_id', 0)->first();
         $sellerShippingList = null;
@@ -650,7 +658,6 @@ class CartManager
                 $sellerShippingList = ShippingMethod::where(['status' => 1])->where(['creator_id' => $product->user_id, 'creator_type' => 'seller'])->get();
             }
         }
-
         if ($product['product_type'] == 'digital') {
             return self::addToCartDigitalProduct($request, $product, $shippingType, $sellerShippingList);
         } else {
@@ -833,7 +840,7 @@ class CartManager
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-                                   
+
     public static function delivery_cost($delivery_pincode){
       $cartData = Cart::where('customer_id', auth('customer')->id())->get();
       if ($cartData->isEmpty()) {
@@ -887,7 +894,7 @@ class CartManager
                    return response()->json(['error' => 'Failed to fetch shipping cost'], 500);
           }
       }
-      
+
       $shipping = CartShipping::firstOrNew(['cart_group_id' => $groupid[0]]);
       $shipping->shipping_method_id = 9;
       $shipping->shipping_cost = $totalShippingCost;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Payment_Methods;
 
 use App\Models\PaymentRequest;
 use App\Models\User;
+use App\Models\ShippingAddress;
 use App\Traits\Processor;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -55,8 +56,9 @@ class RazorPayController extends Controller
         if ($validator->fails()) {
             return response()->json($this->response_formatter(GATEWAYS_DEFAULT_400, null, $this->error_processor($validator)), 400);
         }
-
-        $data = $this->payment::where(['id' => $request['payment_id']])->where(['is_paid' => 0])->first();
+		
+      $user_info = ShippingAddress::select('contact_person_name','email','address_type','address','city','phone')->where('id', session()->get('address_id'))->first();
+      $data = $this->payment::where(['id' => $request['payment_id']])->where(['is_paid' => 0])->first();
         if (!isset($data)) {
             return response()->json($this->response_formatter(GATEWAYS_DEFAULT_204), 200);
         }
@@ -70,8 +72,8 @@ class RazorPayController extends Controller
             $business_name = "my_business";
             $business_logo = url('/');
         }
-
-        return view('payment.razor-pay', compact('data', 'payer', 'business_logo', 'business_name'));
+	   return view('payment.razor-pay', compact('data', 'payer', 'business_logo', 'business_name','user_info'));
+       // return view('payment.razor-pay', compact('data', 'payer', 'business_logo', 'business_name'));
     }
 
     public function payment(Request $request): JsonResponse|Redirector|RedirectResponse|Application

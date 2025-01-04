@@ -171,6 +171,7 @@ if (!function_exists('getValidImage')) {
                     return (!empty($path) && $path['status'] == 200) ? $path['path'] : dynamicAsset(path: 'public/assets/' . $placeholderMap[$type]);
                 }
             }
+
             return (!empty($path) && $path['status'] == 200) ? $path['path'] : dynamicStorage(path: 'public/assets/front-end/img/placeholder/placeholder-2-1.png');
         }
     }

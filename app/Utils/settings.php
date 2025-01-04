@@ -8,7 +8,7 @@ if (!function_exists('getWebConfig')) {
     function getWebConfig($name): string|object|array|null
     {
         $config = null;
-        $check = ['currency_model', 'currency_symbol_position', 'system_default_currency', 'language', 'company_name', 'decimal_point_settings', 'product_brand', 'digital_product', 'company_email', 'business_mode', 'storage_connection_type', 'company_web_logo'];
+        $check = ['currency_model', 'currency_symbol_position', 'system_default_currency', 'language', 'company_name', 'decimal_point_settings', 'product_brand', 'digital_product', 'company_email', 'business_mode', 'storage_connection_type', 'company_web_logo','google_tag_manager_id'];
 
         if (in_array($name, $check) == true && session()->has($name)) {
             $config = session($name);
@@ -34,7 +34,6 @@ if (!function_exists('getWebConfig')) {
         }
         return $config;
     }
-
     function storageDataProcessing($name, $value)
     {
         $arrayOfCompaniesValue = ['company_web_logo', 'company_mobile_logo', 'company_footer_logo', 'company_fav_icon', 'loader_gif'];
@@ -62,6 +61,7 @@ if (!function_exists('getWebConfig')) {
         return null;
     }
 
+
     function storageLink($path, $data, $type): string|array
     {
         if ($type == 's3' && config('filesystems.disks.default') == 's3') {
@@ -74,18 +74,16 @@ if (!function_exists('getWebConfig')) {
                 ];
             }
         } else {
-            if (fileCheck(disk: 'public', path: $path . '/' . $data) && !empty($data)) {
                 return [
                     'key' => $data,
-                    'path' => asset('storage/app/public') . '/' . $path . '/' . $data,
+                    'path' => asset('public/assets/back-end') . '/' . $path . '/' . $data,
                     'status' => 200,
                 ];
-            }
         }
         return [
             'key' => $data,
-            'path' => null,
-            'status' => 404,
+            'path' => asset('public/assets/back-end') . '/' . $path . '/' . $data,
+            'status' => 200,
         ];
     }
     function storageLinkForGallery($path, $type): string|null
@@ -97,7 +95,7 @@ if (!function_exists('getWebConfig')) {
             }
         } else {
             if (fileCheck(disk: 'public', path: $path) ) {
-                return asset('storage/app/public') . '/' . $path;
+                return asset('public/assets/back-end') . '/' . $path;
             }
         }
         return null;
