@@ -10,7 +10,6 @@ class Hsncode extends Model
         'hsn_code_under_gst',
         'description',
         'tax',
-        'status',
-      	'category_id'
+        'status'
     ];
 }

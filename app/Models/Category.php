@@ -35,11 +35,6 @@ class Category extends Model
         'description',
      	'organic_status',
         'priority',
-        'meta_title',
-        'meta_description',
-        'keywords',
-        'alt_tag',
-        'content_writing_area',
     ];
 
     protected $casts = [

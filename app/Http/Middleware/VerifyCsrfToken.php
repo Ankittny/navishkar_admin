@@ -22,6 +22,6 @@ class VerifyCsrfToken extends Middleware
         '/pay-via-ajax', '/success', '/cancel', '/fail', '/ipn', '/bkash/*',
         '/paytabs-response', '/customer/choose-shipping-address', '/system_settings',
         '/paytm*', 'payment/paytabs/callback*',
-        'admin/hsn/delete','catId',
+        'admin/hsn/delete'
     ];
 }

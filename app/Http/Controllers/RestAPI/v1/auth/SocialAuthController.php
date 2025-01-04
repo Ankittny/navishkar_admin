@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 
 class SocialAuthController extends Controller
 {
@@ -33,15 +32,13 @@ class SocialAuthController extends Controller
         $token = $request['token'];
         $email = $request['email'];
         $unique_id = $request['unique_id'];
-
+        
         try {
             if ($request['medium'] == 'google') {
-                $res = $client->request('GET', 'https://www.googleapis.com/oauth2/v1/userinfo?access_token=' . $token,[
-                'verify' => false,
-                ]);
+                $res = $client->request('GET', 'https://www.googleapis.com/oauth2/v1/userinfo?access_token=' . $token);
                 $data = json_decode($res->getBody()->getContents(), true);
             } elseif ($request['medium'] == 'facebook') {
-                $res = $client->request('GET', 'https://graph.facebook.com/v21.0/me?fields=id,email,name&access_token=' . $token);
+                $res = $client->request('GET', 'https://graph.facebook.com/' . $unique_id . '?access_token=' . $token . '&&fields=name,email');
                 $data = json_decode($res->getBody()->getContents(), true);
             } elseif ($request['medium'] == 'apple') {
                 $apple_login = BusinessSetting::where(['type'=>'apple_login'])->first();
@@ -76,9 +73,9 @@ class SocialAuthController extends Controller
                 $data = json_decode(base64_decode($claims),true);
             }
         } catch (\Exception $exception) {
-            Log::info('User created error', ['error' => $exception]);
             return response()->json(['error' => translate('wrong_credential')]);
         }
+
         if($request['medium'] == 'apple' && isset($data['email'])){
             $fast_name = strstr($data['email'], '@', true);
             $user = User::where('email', $data['email'])->first();
@@ -108,13 +105,15 @@ class SocialAuthController extends Controller
             }
 
             $token = self::login_process_passport($user, $user['email'], $data['email']);
-
             if ($token != null) {
+
                 CartManager::cart_to_db($request);
                 return response()->json(['token' => $token]);
             }
             return response()->json(['error_message' => translate('customer_not_found_or_account_has_been_suspended')]);
-        } elseif (isset($data['email']) && strcmp($email, $data['email']) === 0) {
+
+
+        }elseif ( strcmp($email, $data['email']) === 0) {
             $name = explode(' ', $data['name']);
             if (count($name) > 1) {
                 $fast_name = implode(" ", array_slice($name, 0, -1));
@@ -124,7 +123,6 @@ class SocialAuthController extends Controller
                 $last_name = '';
             }
             $user = User::where('email', $email)->first();
-
             if (isset($user) == false) {
                 $user = User::create([
                     'f_name' => $fast_name,
@@ -150,12 +148,10 @@ class SocialAuthController extends Controller
                     'token_type' => 'update phone number',
                     'temporary_token' => $user->temporary_token ]);
             }
-            if(empty($user)){
-                $token = self::login_process_passport($user, $user['email'], $data['id']);
-            } else{
-                $token = self::login_process_passport($user, $user['email'], $user['social_id']);
-            }
+
+            $token = self::login_process_passport($user, $user['email'], $data['id']);
             if ($token != null) {
+
                 CartManager::cart_to_db($request);
                 return response()->json(['token' => $token]);
             }
@@ -171,6 +167,7 @@ class SocialAuthController extends Controller
             'email' => $email,
             'password' => $password
         ];
+
         if (isset($user) && $user->is_active && auth()->attempt($data)) {
             $token = auth()->user()->createToken('LaravelAuthApp')->accessToken;
         } else {

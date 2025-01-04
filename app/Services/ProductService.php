@@ -242,31 +242,16 @@ class ProductService
         }
         return $result;
     }
-  
-   public function getPrice($request): array
-    {
-        $prices = array_filter($request->all(), function($key) {
-            return strpos($key, 'price_') === 0;
-        }, ARRAY_FILTER_USE_KEY);
-        return $prices;
-    }
-    public function getQuantity($request): array
-    {
-        $quantity = array_filter($request->all(), function($key) {
-            return strpos($key, 'qty_') === 0;
-        }, ARRAY_FILTER_USE_KEY);
-        return $quantity;
-    }
 
     public function getSkuCombinationView(object $request): string
     {
         $colorsActive = ($request->has('colors_active') && $request->has('colors') && count($request['colors']) > 0) ? 1 : 0;
-        $unitPrice = self::getPrice($request);
-        $getQuantity = self::getQuantity($request);
+        $unitPrice = $request['unit_price'];
         $productName = $request['name'][array_search('en', $request['lang'])];
         $options = $this->getOptions(request: $request);
         $combinations = $this->getCombinations(arrays: $options);
-        return view(Product::SKU_COMBINATION[VIEW], compact('combinations','getQuantity', 'unitPrice', 'colorsActive', 'productName'))->render();
+
+        return view(Product::SKU_COMBINATION[VIEW], compact('combinations', 'unitPrice', 'colorsActive', 'productName'))->render();
     }
 
     public function getVariations(object $request, array $combinations): array
@@ -403,7 +388,7 @@ class ProductService
             'variation' => $request['product_type'] == 'physical' ? json_encode($variations) : json_encode([]),
             'digital_product_file_types' => $request->has('extensions_type') ? $request->get('extensions_type') : [],
             'digital_product_extensions' => $digitalFileCombinations,
-            'unit_price' => currencyConverter(amount: $request['unit_price']),
+            'unit_price' => $request['unit_price'],
             'purchase_price' => 0,
             'how_to_use' => $request['how_to_use'],
           	'ingredients1' => $request['ingredients1'],
@@ -413,11 +398,11 @@ class ProductService
             'return_policy' => $request['return_policy'],
             'feature_key' => $request['feature_key'],
             'hsn_code_under_gst' => $request['hsn_code_under_gst'],
-            'tax' => $request['tax_type'] == 'flat' ? currencyConverter(amount: $request['tax']) : $request['tax'],
+            'tax' => $request['tax_type'] == 'flat' ? $request['tax'] : $request['tax'],
             'tax_type' => $request->get('tax_type', 'percent'),
             'tax_model' => $request['tax_model'],
             'how_to_use' => $request['how_to_use'],
-            'discount' => $request['discount_type'] == 'flat' ? currencyConverter(amount: $request['discount']) : $request['discount'],
+            'discount' => $request['discount_type'] == 'flat' ? $request['discount'] : $request['discount'],
             'discount_type' => $request['discount_type'],
             'attributes' => $request['product_type'] == 'physical' ? json_encode($request['choice_attributes']) : json_encode([]),
             'ingredients_id' => $this->getIngredientsObject(request: $request),
@@ -427,7 +412,7 @@ class ProductService
             'video_url' => $request['video_url'],
             'status' => $addedBy == 'admin' ? 1 : 0,
             'request_status' => $addedBy == 'admin' ? 1 : (getWebConfig(name: 'new_product_approval') == 1 ? 0 : 1),
-            'shipping_cost' => $request['product_type'] == 'physical' ? currencyConverter(amount: $request['shipping_cost']) : 0,
+            'shipping_cost' => $request['product_type'] == 'physical' ?  $request['shipping_cost'] : 0,
             'multiply_qty' => ($request['product_type'] == 'physical') ? ($request['multiply_qty'] == 'on' ? 1 : 0) : 0, //to be changed in form multiply_qty
             'color_image' => json_encode($processedImages['colored_image_names']),
             'images' => json_encode($processedImages['image_names']),
@@ -435,8 +420,6 @@ class ProductService
             'thumbnail_storage_type' => $request->has('image') ? $storage : null,
             'meta_title' => $request['meta_title'],
             'meta_description' => $request['meta_description'],
-          	'keywords' => $request['keywords'],
-            'alt_tag' => $request['alt_tag'],
             'meta_image' => $request->has('meta_image') ? $this->upload(dir: 'product/meta/', format: 'webp', image: $request['meta_image']) : $request->existing_meta_image,
         ];
     }
@@ -482,14 +465,14 @@ class ProductService
             'digital_product_type' => $request['product_type'] == 'digital' ? $request['digital_product_type'] : null,
             'details' => $request['description'][array_search('en', $request['lang'])],
             'colors' => $this->getColorsObject(request: $request),
-            //'choice_options' => $request['product_type'] == 'physical' ? json_encode($this->getChoiceOptions(request: $request)) : json_encode([]),
+            'choice_options' => $request['product_type'] == 'physical' ? json_encode($this->getChoiceOptions(request: $request)) : json_encode([]),
             'variation' => $request['product_type'] == 'physical' ? json_encode($variations) : json_encode([]),
             'digital_product_file_types' => $request->has('extensions_type') ? $request->get('extensions_type') : [],
             'digital_product_extensions' => $digitalFileCombinations,
-            'unit_price' => currencyConverter(amount: $request['unit_price']),
+            'unit_price' => $request['unit_price'],
             'purchase_price' => 0,
             'ingredients_id' => $this->getIngredientsObject(request: $request),
-            'tax' => $request['tax_type'] == 'flat' ? currencyConverter(amount: $request['tax']) : $request['tax'],
+            'tax' => $request['tax_type'] == 'flat' ? $request['tax'] : $request['tax'],
             'tax_type' => $request['tax_type'],
             'how_to_use' => $request['how_to_use'],
             'ingredients1' => $request['ingredients1'],
@@ -501,14 +484,14 @@ class ProductService
             'return_policy' => $request['return_policy'],
             'feature_key' => $request['feature_key'],
             'hsn_code_under_gst' => $request['hsn_code_under_gst'],
-            'discount' => $request['discount_type'] == 'flat' ? currencyConverter(amount: $request['discount']) : $request['discount'],
+            'discount' => $request['discount_type'] == 'flat' ? $request['discount'] : $request['discount'],
             'discount_type' => $request['discount_type'],
             'attributes' => $request['product_type'] == 'physical' ? json_encode($request['choice_attributes']) : json_encode([]),
             'current_stock' => $request['product_type'] == 'physical' ? abs($stockCount) : 999999999,
             'minimum_order_qty' => $request['minimum_order_qty'],
             'video_provider' => 'youtube',
             'video_url' => $request['video_url'],
-            'shipping_cost' => $request['product_type'] == 'physical' ? (getWebConfig(name: 'product_wise_shipping_cost_approval') == 1 && $product->shipping_cost == currencyConverter($request->shipping_cost) ? $product->shipping_cost : currencyConverter(amount: $request['shipping_cost'])) : 0,
+            'shipping_cost' => $request['product_type'] == 'physical' ? (getWebConfig(name: 'product_wise_shipping_cost_approval') == 1 && $product->shipping_cost == $request->shipping_cost ? $product->shipping_cost :  $request['shipping_cost']) : 0,
             'multiply_qty' => ($request['product_type'] == 'physical') ? ($request['multiply_qty'] == 'on' ? 1 : 0) : 0,
             'color_image' => json_encode($processedImages['colored_image_names']),
             'images' => json_encode($processedImages['image_names']),
@@ -516,15 +499,9 @@ class ProductService
             'digital_file_ready_storage_type' => $request->has('digital_file_ready') ? $storage : $product['digital_file_ready_storage_type'],
             'meta_title' => $request['meta_title'],
             'meta_description' => $request['meta_description'],
-          	'keywords' => $request['keywords'],
-            'alt_tag' => $request['alt_tag'],
             'meta_image' => $request->file('meta_image') ? $this->update(dir: 'product/meta/', oldImage: $product['meta_image'], format: 'png', image: $request['meta_image']) : $product['meta_image'],
         ];
 
-      	$choiceOptions = json_encode($this->getChoiceOptions(request: $request));
-        if($choiceOptions != "[]" || count(json_decode($choiceOptions)) > 0 ){
-            $dataArray['choice_options'] = $request['product_type'] == 'physical' ? $choiceOptions : json_encode([]);
-        }
         if ($request->file('image')) {
             $dataArray += [
                 'thumbnail' => $this->update(dir: 'product/thumbnail/', oldImage: $product['thumbnail'], format: 'webp', image: $request['image'], fileType: 'image'),
