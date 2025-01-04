@@ -115,8 +115,6 @@ class Product extends Model
      	'hsn_code_under_gst',
         'return_policy',
         'feature_key',
-      	'keywords',
-        'alt_tag',
     ];
 
     /**

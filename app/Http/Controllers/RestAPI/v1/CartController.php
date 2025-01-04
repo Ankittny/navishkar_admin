@@ -8,14 +8,11 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Utils\CartManager;
 use App\Utils\Helpers;
-use App\Models\CartShipping;
 use App\Utils\OrderManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use function React\Promise\all;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -98,6 +95,7 @@ class CartController extends Controller
         if ($validator->errors()->count() > 0) {
             return response()->json(['errors' => Helpers::error_processor($validator)]);
         }
+
         $cart = CartManager::add_to_cart($request);
         return response()->json($cart, 200);
     }
@@ -168,105 +166,5 @@ class CartController extends Controller
             Cart::whereIn('id', $request['ids'])->update(['is_checked' => 1]);
         }
         return response()->json(translate('Successfully_Update'), 200);
-    }
-    public function add_shipping_cost(Request $request){
-        $validator = Validator::make($request->all(), [
-            'zipcode' => 'required'
-        ], [
-            'zipcode.required' => translate('Zipcode required!')
-        ]);
-        if ($validator->errors()->count() > 0) {
-            return response()->json(['errors' => Helpers::error_processor($validator)]);
-        }
-        $checkZon = $this->getPinCodeDetails($request);
-        if(!empty($checkZon['delivery_codes'])){
-            $result = $this->delivery_cost($request->zipcode,$request);
-            if($result){
-                return response()->json(['status'=>true,'message'=>'Cost Add successfully'], 200);
-            } else {
-                return response()->json(['status'=>false,'message'=>'Cost not add'], 200);
-            }
-        } else {
-            return response()->json(['error' => 'Pincode not found'], 200);
-        }
-    }
-
-    public function getPinCodeDetails(Request $request)
-     {
-        $client = new Client();
-        $url = "https://track.delhivery.com/c/api/pin-codes/json/?filter_codes=" . $request->zipcode;
-        try {
-            $response = $client->request('GET', $url, [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Authorization' => '298946431eb6b00835b0cf6aaaad8c9a4242c111',
-                ],
-                'verify' => false,
-            ]);
-            $data = json_decode($response->getBody(), true);
-            return $data;
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function delivery_cost($delivery_pincode,$request)
-    {
-        $user = Helpers::get_customer($request);
-        //dd($user);
-        $cartData = Cart::where('customer_id', $user->id)->get();
-        //dd($cartData);
-        if ($cartData->isEmpty()) {
-            return response()->json(['error' => 'Cart is empty'], 404);
-        }
-        $totalShippingCost = 0;
-        $groupid = CartManager::get_cart_group_ids($request);
-
-        if (empty($groupid)) {
-            return response()->json(['error' => 'Cart group ID not found'], 404);
-        }
-        foreach ($cartData as $itemsData) {
-            $product = Product::find($itemsData->product_id);
-            if (!$product) {
-                return response()->json(['error' => 'Product not found'], 404);
-            }
-            $client = new Client();
-            $md = "S";
-            $ss = "RTO";
-            $d_pin = $delivery_pincode;
-            $o_pin = $product->seller->shop->pin_code;
-            $cgm = 50;
-            $url = "https://track.delhivery.com/api/kinko/v1/invoice/charges/.json"; // Fixed URL
-            try {
-                $response = $client->request('GET', $url, [
-                    'headers' => [
-                        'Authorization' => 'Token 298946431eb6b00835b0cf6aaaad8c9a4242c111',
-                    ],
-                    'query' => [
-                        'md' => $md,
-                        'ss' => $ss,
-                        'd_pin' => $d_pin,
-                        'o_pin' => $o_pin,
-                        'cgm' => $cgm,
-                    ],
-                    'verify' => false,
-                ]);
-                $data = json_decode($response->getBody(), true);
-                if ($data && isset($data[0]['total_amount']) && $data[0]['total_amount'] != 0) {
-                 Cart::where(['product_id' => $itemsData->product_id, 'customer_id' => $user->id])->update(['delivery_cost' => currencyConverter(amount: $data[0]['total_amount']*$itemsData->quantity)]);
-                    $totalShippingCost += currencyConverter(amount: $data[0]['total_amount']*$itemsData->quantity);
-                } else {
-                    \Log::warning('No valid shipping cost found for pincode ' . $d_pin);
-                }
-            } catch (\Exception $e) {
-                    \Log::error('API Request Error: ' . $e->getMessage());
-                     return response()->json(['error' => 'Failed to fetch shipping cost'], 500);
-            }
-        }
-        $shipping = CartShipping::firstOrNew(['cart_group_id' => $groupid[0]]);
-        $shipping->shipping_method_id = 9;
-        $shipping->shipping_cost = $totalShippingCost;
-        $shipping->save();
-        return response()->json(['success' => 'Shipping cost calculated successfully', 'total_cost' => $totalShippingCost]);
     }
 }

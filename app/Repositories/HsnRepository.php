@@ -20,7 +20,6 @@ class HsnRepository implements HsnRepositoryInterface
             'hsn_code_under_gst',
             'description',
             'tax',
-          	'category_id',
         ]);
 
         $hsncode = new Hsncode();
@@ -36,7 +35,6 @@ class HsnRepository implements HsnRepositoryInterface
             'hsn_code_under_gst',
             'description',
             'tax',
-            'category_id',
         ]);
 
         // Find the Hsncode model by ID
@@ -48,7 +46,6 @@ class HsnRepository implements HsnRepositoryInterface
                 'hsn_code_under_gst' => $data['hsn_code_under_gst'],
                 'description' => $data['description'],
                 'tax' => $data['tax'],
-              	'category_id' => $data['category_id'],
             ]);
         }
 

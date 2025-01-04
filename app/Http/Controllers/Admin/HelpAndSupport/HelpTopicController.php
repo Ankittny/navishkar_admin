@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\HelpAndSupport;
 
 use App\Contracts\Repositories\HelpTopicRepositoryInterface;
-use App\Contracts\Repositories\CategoryRepositoryInterface;
 use App\Enums\ViewPaths\Admin\HelpTopic;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Admin\HelpTopicAddRequest;
@@ -18,25 +17,20 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class HelpTopicController extends BaseController
 {
 
-    public function __construct(
-        private readonly HelpTopicRepositoryInterface $helpTopicRepo,
-        private readonly CategoryRepositoryInterface  $categoryRepo)
+    public function __construct(private readonly HelpTopicRepositoryInterface $helpTopicRepo)
     {
     }
 
     public function index(?Request $request, string $type = null): View|Collection|LengthAwarePaginator|null|callable|RedirectResponse
     {
-        return $this->getListView($request);
+        return $this->getListView();
     }
 
-    public function getListView($request): View
+    public function getListView(): View
     {
-        $categories = $this->categoryRepo->getListWhere(orderBy: ['id'=>'desc'], searchValue: $request->get('searchValue'), filters: ['position' => 0], dataLimit: getWebConfig(name: 'pagination_limit'));
-        $languages = getWebConfig(name: 'pnc_language') ?? null;
-        $defaultLanguage = $languages[0];
         $helps = $this->helpTopicRepo->getListWhere(orderBy: ['id' => 'desc'], filters: ['type' => 'default'],dataLimit: 'all');
-        return view(HelpTopic::LIST[VIEW], compact('helps','categories','languages','defaultLanguage'));
-    }     
+        return view(HelpTopic::LIST[VIEW], compact('helps'));
+    }
 
     public function add(HelpTopicAddRequest $request): RedirectResponse
     {

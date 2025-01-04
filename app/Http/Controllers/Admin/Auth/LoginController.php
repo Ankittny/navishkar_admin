@@ -59,7 +59,7 @@ class LoginController extends BaseController
         Session::put(SessionKey::ADMIN_RECAPTCHA_KEY, $recaptchaBuilder->getPhrase());
 
         $recaptcha = getWebConfig(name: 'recaptcha');
-
+          
         return view(Auth::ADMIN_LOGIN, compact('recaptchaBuilder', 'recaptcha'))->with(['role' => $userType]);
     }
 
