@@ -210,50 +210,60 @@ class PhoneVerificationController extends Controller
         ]], 403);
     }
 
-    public function send_otp(Request $request){
-        $validator = Validator::make($request->all(), [
-            'phone' => 'required',
-        ]);
+    public function send_otp(Request $request)
+    {
+        try {
+            // Validate the incoming request
+            $validator = Validator::make($request->all(), [
+                'phone' => 'required',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => Helpers::error_processor($validator)], 403);
-        }
-
-        $user = User::where(['phone' => $request['phone']])->first();
-        if(!empty($user)){
-            $user->phone = $request['phone'];
-            $user->save();
-            $result =  $this->resend_otp($request['phone']);
-            if($result==true){
-                return response()->json([
-                    'status' => true,
-                    'message' => translate('otp_sent'),
-                    'profile_status' => false
-                ], 200);
-            } else {
-                return response()->json(['errors' => [
-                    ['message' => translate('otp_not_sent')]
-                ]], 403);
+            if ($validator->fails()) {
+                return response()->json(['errors' => Helpers::error_processor($validator)], 403);
             }
 
-        } else {
-            $user->phone = $request['phone'];
-            if($user->save()){
-                $result =  $this->resend_otp($request['phone']);
-                if($result==true){
+            // Check if the user exists in the database based on phone number
+            $user = User::where('phone', $request->phone)->first();
+
+            if ($user) {
+                // User exists, update the phone number if necessary and send OTP
+                $user->phone = $request->phone;
+                $user->save();
+                $result = $this->resend_otp($request->phone);
+                if ($result) {
                     return response()->json([
                         'status' => true,
                         'message' => translate('otp_sent'),
                         'profile_status' => false
                     ], 200);
                 } else {
-                    return response()->json(['errors' => [
-                        ['message' => translate('otp_not_sent')]
-                    ]], 403);
+                    return response()->json(['status' => false, 'message' => translate('otp_not_sent')], 403);
+                }
+            } else {
+                // User doesn't exist, create a new user and send OTP
+                $user = new User();
+                $user->phone = $request->phone;
+                if ($user->save()) {
+                    $result = $this->resend_otp($request->phone);
+                    if ($result) {
+                        return response()->json([
+                            'status' => true,
+                            'message' => translate('otp_sent'),
+                            'profile_status' => false
+                        ], 200);
+                    } else {
+                        return response()->json(['status' => false, 'message' => translate('otp_not_sent')], 403);
+                    }
+                } else {
+                    return response()->json(['status' => false, 'message' => translate('user_creation_failed')], 500);
                 }
             }
-
-
+        } catch (\Exception $e) {
+            // Catch any exception and return a proper error message
+            return response()->json([
+                'status' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
         }
     }
 
