@@ -9,6 +9,7 @@ use App\Utils\CategoryManager;
 use App\Utils\Helpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\WorkShopCategory;
 
 class CategoryController extends Controller
 {
@@ -48,7 +49,7 @@ class CategoryController extends Controller
         $categories = CategoryManager::getPriorityWiseCategorySortQuery(query: $categories);
         return response()->json($categories->values());
     }
-  
+
   	public function get_ingredients(Request $request): JsonResponse
     {
         $categoriesID = [];
@@ -83,7 +84,7 @@ class CategoryController extends Controller
         $categories = CategoryManager::getPriorityWiseCategorySortQuery(query: $categories);
         return response()->json($categories->values());
     }
-  	
+
     public function get_products(Request $request, $id): JsonResponse
     {
         return response()->json(Helpers::product_data_formatting(CategoryManager::products($id, $request), true), 200);
@@ -117,6 +118,18 @@ class CategoryController extends Controller
         }
 
         return response()->json(['find_what_you_need'=>$final_category], 200);
+    }
+
+    public function workshopcategory(){
+        try {
+            $workshopcategories = WorkShopCategory::select('name','slug','meta_title','description','keywords')->latest()->get();
+            if (empty($workshopcategories)) {
+                return response()->json(['workshopcategories' => []], 200);
+            }
+            return response()->json(['workshopcategories' => $workshopcategories], 200);
+        } catch (\Exception $e) {
+            return response()->json(['workshopcategories' => []], 200);
+        }
     }
 
 }

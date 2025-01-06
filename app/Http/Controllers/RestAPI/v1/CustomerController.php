@@ -287,7 +287,7 @@ class CustomerController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ];
-        
+
         ShippingAddress::insert($address);
         return response()->json(['message' => translate('successfully added!')], 200);
     }
@@ -711,8 +711,10 @@ class CustomerController extends Controller
         $validator = Validator::make($request->all(), [
             'f_name' => 'required',
             'l_name' => 'required',
-            'phone' => 'required',
+            'email' => 'required',
+            // 'phone' => 'required',
         ], [
+            'f_name.required' => translate('Email is required!'),
             'f_name.required' => translate('First name is required!'),
             'l_name.required' => translate('Last name is required!'),
         ]);
@@ -736,7 +738,8 @@ class CustomerController extends Controller
         $userDetails = [
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
-            'phone' => $request->phone,
+            'email' => $request->email ?? "",
+            // 'phone' => $request->phone,
             'image' => $imageName,
             'password' => $pass,
             'updated_at' => now(),
