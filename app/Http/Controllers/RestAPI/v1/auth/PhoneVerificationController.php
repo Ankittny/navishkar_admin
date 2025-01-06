@@ -237,6 +237,7 @@ class PhoneVerificationController extends Controller
             }
 
         } else {
+            $user = new User();
             $user->phone = $request['phone'];
             if($user->save()){
                 $result =  $this->resend_otp($request['phone']);
