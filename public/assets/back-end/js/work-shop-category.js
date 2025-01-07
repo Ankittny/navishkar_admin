@@ -5,7 +5,7 @@ let getCancelWord = $('#message-cancel-word').data('text');
 let messageAreYouSureDeleteThis = $('#message-are-you-sure-delete-this').data('text');
 let messageYouWillNotAbleRevertThis = $('#message-you-will-not-be-able-to-revert-this').data('text');
 
-$('.attribute-delete-button').on('click', function () {
+$('.attribute-delete-button').on('click', function () { 
     let attributeId = $(this).attr("id");
     Swal.fire({
         title: messageAreYouSureDeleteThis,
@@ -37,8 +37,11 @@ $('.attribute-delete-button').on('click', function () {
     })
 })
 
+
 $('.delete-work-shop').on('click', function () {
-    let brandId = $(this).attr("id");
+    let workshop_id = $(this).attr("id");
+    var urlElement = document.getElementById('url-container');
+    var deleteUrl = urlElement.getAttribute('data-delete-url');
     Swal.fire({
         title: messageAreYouSureDeleteThis,
         text: messageYouWillNotAbleRevertThis,
@@ -51,7 +54,28 @@ $('.delete-work-shop').on('click', function () {
         reverseButtons: true
     }).then((result) => {
         if (result.value) {
-            
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: deleteUrl,
+                type: 'POST',
+                data: {
+                    workshop_id: workshop_id,
+                },
+                success: function(response) {
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while canceling the order.');
+                }
+            });
+        }
+        else{
+
         }
     })
 });

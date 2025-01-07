@@ -25,6 +25,10 @@ enum Category
         URI => 'update-work-shop-data',
         VIEW => ''
     ];
+    const WORKSHOPDELETE = [
+        URI => 'delete-delete',
+        VIEW => ''
+    ];
     const ADD = [
         URI => 'add-new',
         VIEW => 'admin-views.brand.add-new'

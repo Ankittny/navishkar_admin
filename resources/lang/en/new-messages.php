@@ -8641,4 +8641,5 @@ return [
 	"edit_work_shop_category" => "Edit work shop category",
 	"work_shop_category_update_successfully" => "Work shop category update successfully",
 	"Options" => "Options",
+	"work_shop_category_delete_successfully" => "Work shop category delete successfully",
 ];

@@ -3,6 +3,7 @@
 @section('title', translate('work_shop_category'))
 
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
     <div class="content container-fluid">
         <div class="mb-3">
             <h2 class="h1 mb-0 d-flex gap-10">
@@ -32,7 +33,7 @@
                                         @foreach($languages as $lang)
                                             <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : ''}} form-system-language-form" id="{{ $lang}}-form">
                                                 <label class="title-color">{{ translate('Name') }}<span class="text-danger">*</span> ({{strtoupper($lang) }})</label>
-                                                <input type="text" name="name" class="form-control" placeholder="{{ translate('new_Category') }}">
+                                                <input type="text" name="name" class="form-control category-title-name" placeholder="{{ translate('new_Category') }}">
                                             </div>
                                             <input type="hidden" name="lang[]" value="{{ $lang}}">
                                         @endforeach
@@ -43,7 +44,7 @@
                                     @foreach($languages as $lang)
                                         <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : ''}} form-system-language-form" id="{{ $lang}}-form">
                                             <label class="title-color">{{ translate('Slug') }} ({{strtoupper($lang) }})</label>
-                                            <input type="text" name="slug" class="form-control" placeholder="{{ translate('slug') }}">
+                                            <input type="text" name="slug" class="form-control" id="slug-id" placeholder="{{ translate('slug') }}">
                                         </div>
                                         <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : ''}} form-system-language-form" id="{{ $lang}}-form">
                                             <label class="title-color">{{ translate('Meta Title') }} ({{strtoupper($lang) }})</label>
@@ -108,20 +109,17 @@
                                 </h5>
                             </div>
                             <div class="d-flex flex-wrap gap-3 align-items-center">
-                                <form action="{{ url()->current() }}" method="GET">
-                                    <div class="input-group input-group-custom input-group-merge">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">
-                                                <i class="tio-search"></i>
-                                            </div>
-                                        </div>
-                                        <input id="" type="search" name="searchValue" class="form-control"
-                                               placeholder="{{ translate('search_by_category_name') }}"
-                                               value="{{ request('searchValue') }}">
-                                        <button type="submit"
-                                                class="btn btn--primary">{{ translate('search') }}</button>
+                            <form action="{{route('admin.category.work-shop-category')}}" method="GET">
+                                <div class="input-group input-group-custom input-group-merge">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="tio-search"></i>
                                     </div>
-                                </form>
+                                </div>
+                                <input type="search" name="searchValue" class="form-control" placeholder="Search HSN Code" aria-label="Search by brand name" value="" required="">
+                                <button type="submit" class="btn btn--primary input-group-text">Search</button>
+                                </div>
+                            </form>
                                 <div class="dropdown">
                                     <button type="button" class="btn btn-outline--primary text-nowrap btn-block"
                                             data-toggle="dropdown">
@@ -198,6 +196,7 @@
                         <div class="d-flex justify-content-lg-end">
                             {{ $categories->links() }}
                         </div>
+                        <div style="display: none;" id="url-container" data-delete-url="{{ route('admin.category.work-shop-delete') }}"></div>
                     </div>
                     @if(count($categories) == 0)
                         @include('layouts.back-end._empty-state',['text'=>'no_category_found'],['image'=>'default'])
@@ -250,4 +249,10 @@
 
 @push('script')
     <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/work-shop-category.js') }}"></script>
+    <script>
+        $('.category-title-name').on('change keyup keypress', function () {
+            var slugValue = $(this).val().replace(/\s+/g, '-');
+            $('#slug-id').val(slugValue);
+        });
+    </script>
 @endpush
