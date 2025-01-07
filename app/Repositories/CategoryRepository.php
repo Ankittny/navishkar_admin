@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Repositories\CategoryRepositoryInterface;
+use App\Contracts\Repositories\{CategoryRepositoryInterface,WorkShopInterface};
 use App\Models\Translation;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Collection;

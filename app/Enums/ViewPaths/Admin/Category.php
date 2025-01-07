@@ -8,6 +8,23 @@ enum Category
         URI => 'view',
         VIEW => 'admin-views.category.view'
     ];
+    const WORKSHOPVIEW = [
+        URI => 'work-shop',
+        VIEW => 'admin-views.category.work-shop-category.view'
+    ];
+    const WORKSHOPUPDATE = [
+        URI => 'update-work-shops/{id}',
+        VIEW => 'admin-views.category.work-shop-category.category-edit'
+    ];
+    const WORKSHOPADD = [
+        URI => 'add-work-shop',
+        VIEW => ''
+    ];
+
+    const WORKSHOPUPDATEDATA = [
+        URI => 'update-work-shop-data',
+        VIEW => ''
+    ];
     const ADD = [
         URI => 'add-new',
         VIEW => 'admin-views.brand.add-new'
