@@ -140,4 +140,9 @@ enum Product
         URI => 'gethsncode',
         VIEW => ''
     ];
+
+    const WORKSHOPPRODUCT = [
+        URI => 'work-shop-product-view',
+        VIEW => 'admin-views.product.work-shop.view',
+    ];
 }

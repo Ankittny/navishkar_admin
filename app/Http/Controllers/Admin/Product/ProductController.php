@@ -35,6 +35,8 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Models\Hsncode;
+use App\Models\WorkShopProduct;
+use App\Models\WorkShopCategory;
 class ProductController extends BaseController
 {
     use FileManagerTrait {
@@ -674,5 +676,25 @@ class ProductController extends BaseController
                 'tax' => $hsn->tax
             ]);
         }
+    }
+
+    public function workShopProductHome(Request $request): View
+    {
+        $workshopcat = WorkShopCategory::select('id','name','meta_title')->get();
+        $query = WorkShopProduct::select('*');
+        if($request->searchValue){
+            $query->where('title', 'like', '%' . $request->searchValue . '%')
+            ->orWhere('description', 'like', '%' . $request->searchValue . '%') // Search by category description
+              ->orWhere('meta_title', 'like', '%' . $request->searchValue . '%');
+         }
+        $product = $query->paginate(10);
+        $languages = getWebConfig(name: 'pnc_language') ?? null;
+        $defaultLanguage = $languages[0];
+        return view(Product::WORKSHOPPRODUCT[VIEW], [
+            'product' => $product,
+            'languages' => $languages,
+            'defaultLanguage' => $defaultLanguage,
+            'workshopcat'=>$workshopcat
+        ]);
     }
 }
