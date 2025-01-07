@@ -184,7 +184,7 @@ Route::group(['namespace' => 'RestAPI\v1', 'prefix' => 'v1', 'middleware' => ['a
 
     Route::group(['prefix' => 'customer', 'middleware' => 'auth:api'], function () {
         Route::get('info', 'CustomerController@info');
-        Route::put('update-profile', 'CustomerController@update_profile');
+        Route::post('update-profile', 'CustomerController@update_profile');
         Route::get('account-delete/{id}', 'CustomerController@account_delete');
 
         Route::group(['prefix' => 'address'], function () {
