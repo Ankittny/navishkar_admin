@@ -2,9 +2,7 @@
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
-
     RewriteEngine On
-
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -18,18 +16,23 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
-
-    # Allow access to assets (JS, CSS, images)
-    <FilesMatch "\.(jpg|jpeg|png|gif|css|js|webp|svg|ico)$">
-        Header set Access-Control-Allow-Origin "*"
-    </FilesMatch>
-
-    # CORS (Uncomment if necessary)
-    # Header set Access-Control-Allow-Origin "*"
 </IfModule>
 
-# Deny access to sensitive files
-<Files .env>
-    Order allow,deny
-    Deny from all
-</Files>
+# Hide sensitive files like .env
+<IfModule mod_headers.c>
+    <Files .env>
+        <IfModule !mod_authz_core.c>
+            Order allow,deny
+            Deny from all
+        </IfModule>
+
+        <IfModule mod_authz_core.c>
+            Require all denied
+        </IfModule>
+    </Files>
+</IfModule>
+
+# Optional: Add CORS support (uncomment if needed)
+#<IfModule mod_headers.c>
+#    Header set Access-Control-Allow-Origin "*"
+#</IfModule>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Product;
 
 use App\Contracts\Repositories\CategoryRepositoryInterface;
 use App\Contracts\Repositories\ProductRepositoryInterface;
+use App\Contracts\Repositories\WorkShopRepositoryInterface;
 use App\Contracts\Repositories\TranslationRepositoryInterface;
 use App\Enums\ExportFileNames\Admin\Category as CategoryExport;
 use App\Enums\ViewPaths\Admin\Category;
@@ -13,6 +14,7 @@ use App\Http\Requests\Admin\CategoryAddRequest;
 use App\Http\Requests\Admin\CategoryUpdateRequest;
 use App\Services\CategoryService;
 use App\Services\ProductService;
+use App\Models\WorkShopCategory;
 use App\Traits\PaginatorTrait;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Contracts\View\View;
@@ -22,18 +24,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use App\Traits\FileManagerTrait;
 
 class CategoryController extends BaseController
 {
     use PaginatorTrait;
+    use FileManagerTrait;
+    protected $workShopRepository;
 
     public function __construct(
         private readonly CategoryRepositoryInterface        $categoryRepo,
         private readonly ProductRepositoryInterface        $productRepo,
         private readonly ProductService        $productService,
         private readonly TranslationRepositoryInterface     $translationRepo,
+        WorkShopRepositoryInterface $workShopRepository
     )
     {
+        $this->workShopRepository = $workShopRepository;
     }
 
     /**
@@ -135,4 +142,44 @@ class CategoryController extends BaseController
         ]), CategoryExport::CATEGORY_LIST_XLSX
         );
     }
+
+    public function workShopCategory(Request $request): View
+    {
+        $categories = WorkShopCategory::select('*')->paginate(10);
+        $languages = getWebConfig(name: 'pnc_language') ?? null;
+        $defaultLanguage = $languages[0];
+        return view(Category::WORKSHOPVIEW[VIEW], [
+            'categories' => $categories,
+            'languages' => $languages,
+            'defaultLanguage' => $defaultLanguage,
+        ]);
+    }
+          
+    public function workShopAdd(Request $request)
+    {   
+        $data = $request->only(['name', 'slug','meta_title','description','image','type','keywords','created_at','updated_at']);
+        $workshop = $this->workShopRepository->createWorkShop($data); 
+        Toastr::success(translate('work_shop_category_added_successfully'));
+        return back();
+    }
+
+    public function workShopGetUpdate(Request $request){
+        $categories = $this->workShopRepository->findWorkShopById($request->id);
+        $languages = getWebConfig(name: 'pnc_language') ?? null;
+        $defaultLanguage = $languages[0];
+        return view(Category::WORKSHOPUPDATE[VIEW], [
+            'categories' => $categories,
+            'languages' => $languages,
+            'defaultLanguage' => $defaultLanguage,
+        ]);
+    }
+
+    public function workShopUpdateData(Request $request){
+        $data = $request->only(['name', 'slug','meta_title','description','type','keywords','created_at','updated_at']);
+        $this->workShopRepository->updateWorkShop($request->id, $data); 
+        Toastr::success(translate('work_shop_category_update_successfully'));
+        return back();
+    }
+
+    
 }

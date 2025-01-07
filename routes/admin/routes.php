@@ -332,7 +332,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin']],
             Route::get(Category::EXPORT[URI], 'getExportList')->name('export');
             Route::post(Category::ORGANICSTATUS[URI], 'updateOrganicStatus')->name('organicstatus');
             Route::post(Category::ORGANIC[URI], 'OrganicStatus')->name('organic');
-
+            Route::get(Category::WORKSHOPVIEW[URI],'workShopCategory')->name('work-shop-category');
+            Route::post(Category::WORKSHOPADD[URI],'workShopAdd')->name('work-shop-add');
+            Route::get(Category::WORKSHOPUPDATE[URI],'workShopGetUpdate')->name('work-shop-get-update');
+            Route::post(Category::WORKSHOPUPDATEDATA[URI],'workShopUpdateData')->name('work-shop-update-data');
         });
     });
 

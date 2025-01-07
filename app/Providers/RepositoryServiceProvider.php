@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Contracts\Repositories\WorkShopRepositoryInterface;
+use App\Repositories\WorkShopRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -11,7 +13,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(WorkShopRepositoryInterface::class, WorkShopRepository::class);
     }
 
     /**

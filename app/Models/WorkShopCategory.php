@@ -17,9 +17,11 @@ class WorkShopCategory extends Model
         'id',
         'name',
         'slug',
+        'image',
+        'type',
         'meta_title',
         'description',
-        'keywords',
+        'keywords',  
         'created_at',
         'updated_at'
     ];
