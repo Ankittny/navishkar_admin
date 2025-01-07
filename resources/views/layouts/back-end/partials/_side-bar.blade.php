@@ -306,6 +306,15 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="navbar-vertical-aside-has-menu">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+                                   href="{{route('admin.products.work-shop-product-home')}}" title="{{translate('work_shop_product')}}">
+                                    <i class="tio-filter-list nav-icon"></i>
+                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        {{translate('work_shop_product')}}
+                                    </span>
+                                </a>
+                            </li>
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin/brand*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
                                    href="javascript:" title="{{translate('brands')}}">

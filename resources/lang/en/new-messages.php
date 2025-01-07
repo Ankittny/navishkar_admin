@@ -8642,4 +8642,7 @@ return [
 	"work_shop_category_update_successfully" => "Work shop category update successfully",
 	"Options" => "Options",
 	"work_shop_category_delete_successfully" => "Work shop category delete successfully",
+	"work_shop_product" => "Work shop product",
+	"work_shop_product_Setup" => "Work shop product Setup",
+	"meta_discription" => "Meta discription",
 ];
