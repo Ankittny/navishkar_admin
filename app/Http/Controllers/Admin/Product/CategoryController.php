@@ -145,7 +145,13 @@ class CategoryController extends BaseController
 
     public function workShopCategory(Request $request): View
     {
-        $categories = WorkShopCategory::select('*')->paginate(10);
+        $query = WorkShopCategory::select('*');
+        if($request->searchValue){
+            $query->where('name', 'like', '%' . $request->searchValue . '%')
+            ->orWhere('description', 'like', '%' . $request->searchValue . '%') // Search by category description
+              ->orWhere('meta_title', 'like', '%' . $request->searchValue . '%');
+         }
+         $categories = $query->paginate(10);
         $languages = getWebConfig(name: 'pnc_language') ?? null;
         $defaultLanguage = $languages[0];
         return view(Category::WORKSHOPVIEW[VIEW], [
@@ -178,6 +184,12 @@ class CategoryController extends BaseController
         $data = $request->only(['name', 'slug','meta_title','description','type','keywords','created_at','updated_at']);
         $this->workShopRepository->updateWorkShop($request->id, $data); 
         Toastr::success(translate('work_shop_category_update_successfully'));
+        return redirect()->route('admin.category.work-shop-category');
+    }
+
+    public function workShopDelete(Request $request){
+        $this->workShopRepository->deleteWorkShop($request->workshop_id); 
+        Toastr::success(translate('work_shop_category_delete_successfully'));
         return back();
     }
 

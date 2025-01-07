@@ -336,6 +336,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin']],
             Route::post(Category::WORKSHOPADD[URI],'workShopAdd')->name('work-shop-add');
             Route::get(Category::WORKSHOPUPDATE[URI],'workShopGetUpdate')->name('work-shop-get-update');
             Route::post(Category::WORKSHOPUPDATEDATA[URI],'workShopUpdateData')->name('work-shop-update-data');
+            Route::post(Category::WORKSHOPDELETE[URI],'workShopDelete')->name('work-shop-delete');
         });
     });
 
