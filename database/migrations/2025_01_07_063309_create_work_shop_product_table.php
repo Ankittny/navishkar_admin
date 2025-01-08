@@ -23,7 +23,7 @@ return new class extends Migration
             $table->text('description'); // Full description of the product
             $table->timestamps(); // Created_at and updated_at timestamps
         });
-    }git 
+    }
 
     /**
      * Reverse the migrations.
