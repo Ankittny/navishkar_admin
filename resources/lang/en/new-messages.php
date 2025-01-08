@@ -8645,4 +8645,7 @@ return [
 	"work_shop_product" => "Work shop product",
 	"work_shop_product_Setup" => "Work shop product Setup",
 	"meta_discription" => "Meta discription",
+	"cover_pic" => "Cover pic",
+	"operative" => "Operative",
+	"Content Writing Area" => "Content Writing Area",
 ];

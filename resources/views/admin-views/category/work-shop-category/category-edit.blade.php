@@ -66,6 +66,14 @@
                                                 <option value="Projects">Projects</option>
                                             </select>
                                         </div>
+                                        <div class="from_part_2">
+                                        <label class="title-color">{{ translate('cover_pic') }}</label>
+                                        <span class="text-info"><span class="text-danger">*</span> Cover Pic</span>
+                                        <div class="custom-file text-left">
+                                            <input type="file" name="image-file" id="category-image" class="custom-file-input image-preview-before-upload" data-preview="#viewer" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required>
+                                            <label class="custom-file-label" for="category-image">{{ translate('choose_File') }}</label>
+                                        </div>
+                                    </div>
                                     @endforeach
                                 </div>
                                 <div class="col-lg-6 mt-4 mt-lg-0 from_part_2">
@@ -76,7 +84,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="d-flex flex-wrap gap-2 justify-content-end">
                                 <button type="reset" id="reset" class="btn btn-secondary">{{ translate('reset') }}</button>
                                 <button type="submit" class="btn btn--primary">{{ translate('submit') }}</button>

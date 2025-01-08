@@ -164,7 +164,7 @@
                                 <th>{{ translate('name') }}</th>
                                 <th class="text-center">{{ translate('priority') }}</th>
                                 <th class="text-center">{{ translate('home_category_status') }}</th>
-                                <th class="text-center">{{ translate('Ingredients Status') }}</th>
+                                <!-- <th class="text-center">{{ translate('Ingredients Status') }}</th> -->
                                 <th class="text-center">{{ translate('action') }}</th>
                             </tr>
                             </thead>
@@ -174,8 +174,7 @@
                                     <td>{{ $category['id'] }}</td>
                                     <td class="d-flex justify-content-center">
                                         <div class="avatar-60 d-flex align-items-center rounded">
-                                            <img class="img-fluid" alt=""
-                                                 src="{{ getStorageImages(path: $category->icon_full_url, type: 'backend-category') }}">
+                                        <img class="img-fluid" alt="" src="{{ asset('public/assets/back-end/category/' . $category['icon']) }}">
                                         </div>
                                     </td>
                                     <td>{{ $category['defaultname'] }}</td>
@@ -206,7 +205,7 @@
                                         </form>
                                     </td>
                                   
-                                     <td class="text-center">
+                                     <!-- <td class="text-center">
                                         <form action="{{ route('admin.category.organicstatus') }}" method="post" id="organic-status{{ $category['id'] }}-form">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $category['id'] }}">
@@ -226,7 +225,7 @@
                                                 <span class="switcher_control"></span>
                                             </label>
                                         </form>
-                                    </td>
+                                    </td> -->
                                   
                                   
                                     <td>

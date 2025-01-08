@@ -1,7 +1,11 @@
 @extends('layouts.back-end.app')
 
 @section('title', translate('work_shop_category'))
-
+@push('css_or_js')
+    <link href="{{ dynamicAsset(path: 'public/assets/back-end/css/tags-input.min.css') }}" rel="stylesheet">
+    <link href="{{ dynamicAsset(path: 'public/assets/select2/css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ dynamicAsset(path: 'public/assets/back-end/plugins/summernote/summernote.min.css') }}" rel="stylesheet">
+@endpush
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
     <div class="content container-fluid">
@@ -51,6 +55,16 @@
                                             <input type="text" name="meta_title" class="form-control" placeholder="{{ translate('meta_title') }}">
                                         </div>
                                         <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : ''}} form-system-language-form" id="{{ $lang}}-form">
+                                            <label class="title-color">{{ translate('short_description') }} ({{strtoupper($lang) }})</label>
+                                            <textarea name="short_description" class="form-control" placeholder="{{ translate('short_description') }}"></textarea>
+                                        </div>
+                                        <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : ''}} form-system-language-form" id="{{ $lang}}-form">
+                                            <label class="title-color" for="{{ $lang }}_content_writing_area">
+                                            {{ translate('operative') }} ({{ strtoupper($lang) }})
+                                        </label>
+                                        <textarea class="summernote {{ $lang == $defaultLanguage ? 'operative' : '' }}" name="operative">{{ old('operative') }}</textarea>
+                                        </div>
+                                        <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : ''}} form-system-language-form" id="{{ $lang}}-form">
                                             <label class="title-color">{{ translate('Description') }} ({{strtoupper($lang) }})</label>
                                             <textarea name="description" class="form-control" placeholder="{{ translate('description_placeholder') }}"></textarea>
                                         </div>
@@ -67,14 +81,14 @@
                                             </select>
                                         </div>
                                     @endforeach
-                                    <!-- <div class="from_part_2">
-                                        <label class="title-color">{{ translate('category_image') }}</label>
-                                        <span class="text-info"><span class="text-danger">*</span> {{ THEME_RATIO[theme_root_path()]['Category Image'] }}</span>
+                                    <div class="from_part_2">
+                                        <label class="title-color">{{ translate('cover_pic') }}</label>
+                                        <span class="text-info"><span class="text-danger">*</span> Cover Pic</span>
                                         <div class="custom-file text-left">
-                                            <input type="file" name="image" id="category-image" class="custom-file-input image-preview-before-upload" data-preview="#viewer" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required>
+                                            <input type="file" name="image-file" id="category-image" class="custom-file-input image-preview-before-upload" data-preview="#viewer" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required>
                                             <label class="custom-file-label" for="category-image">{{ translate('choose_File') }}</label>
                                         </div>
-                                    </div> -->
+                                    </div>
                                 </div>
                                 <div class="col-lg-6 mt-4 mt-lg-0 from_part_2">
                                     <div class="form-group">
@@ -150,7 +164,7 @@
                             <tr>
                                 <th>{{ translate('ID') }}</th>
                                 <th>{{ translate('name') }}</th>
-                                <th class="text-center">{{ translate('slug') }}</th>
+                                <th class="text-center">{{ translate('image') }}</th>
                                 <th class="text-center">{{ translate('meta_title') }}</th>
                                 <th class="text-center">{{ translate('keywords') }}</th>
                                 <th class="text-center">{{ translate('type') }}</th>
@@ -162,8 +176,10 @@
                                 <tr>
                                     <td>{{ $category['id'] }}</td>
                                     <td>{{ $category['name'] }}</td>
-                                    <td class="text-center">
-                                        {{ $category['slug'] }}
+                                    <td class="d-flex justify-content-center">
+                                        <div class="avatar-60 d-flex align-items-center rounded">
+                                        <img class="img-fluid" alt="" src="{{ asset('public/assets/back-end/work-shop/' . $category['cover_pic']) }}">
+                                        </div>
                                     </td>
                                     <td class="text-center">
                                         {{ $category['meta_title'] }}
@@ -249,7 +265,9 @@
 
 @push('script')
     <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/work-shop-category.js') }}"></script>
-    <script>
+    <script src="{{ dynamicAsset(path: 'public/assets/back-end/plugins/summernote/summernote.min.js') }}"></script>
+    <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/admin/product-add-update.js') }}"></script>
+    <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/admin/product-add-colors-img.js') }}"></script>    <script>
         $('.category-title-name').on('change keyup keypress', function () {
             var slugValue = $(this).val().replace(/\s+/g, '-');
             $('#slug-id').val(slugValue);
