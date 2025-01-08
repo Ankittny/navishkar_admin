@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->foreignId('cat_id')->nullable()->constrained('work_shop_category')->onDelete('cascade');
             $table->string('image')->nullable();
-            $table->string('slug', 255)->unique()->charset('utf8');
+            $table->string('slug', 255)->unique();  // Removed charset('utf8')
             $table->text('meta_description')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('keywords')->nullable();
@@ -24,7 +24,6 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
