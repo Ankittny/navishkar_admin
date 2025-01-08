@@ -10,6 +10,7 @@ use App\Utils\Helpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\WorkShopCategory;
+use App\Models\WorkShopProduct;
 
 class CategoryController extends Controller
 {
@@ -150,6 +151,35 @@ class CategoryController extends Controller
             return response()->json(['workshopcategories' => $workshopcategories], 200);
         } catch (\Exception $e) {
             return response()->json(['workshopcategories' => []], 200);
+        }
+    }
+
+
+    public function workshopproducts($slug){
+        try {
+        $cat_id = WorkShopCategory::where('slug', $slug)->first();
+            if(!empty($cat_id)){
+                    $workshopProducts = WorkShopProduct::select(
+                        'title',
+                        'cat_id',
+                        'image',
+                        'slug',
+                        'description',
+                        'meta_description',
+                        'meta_title',
+                        'keywords'
+                        )->addSelect(\DB::raw("CONCAT('" . url('public/assets/back-end/work-shop/product/') .'/'. "', image) as image_path"))
+                        ->where('cat_id', $cat_id->id)->get();
+                    if ($workshopProducts->isEmpty()) {
+                        return response()->json(['status'=>false,'workshopproducts' => []], 200);
+                    }
+                return response()->json(['status'=>true,'workshopproducts' => $workshopProducts], 200);
+            } else {
+                return response()->json(['status'=>false,'workshopproducts' =>[]], 200);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Unable to fetch workshop products'], 500);
         }
     }
 
