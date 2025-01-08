@@ -120,12 +120,33 @@ class CategoryController extends Controller
         return response()->json(['find_what_you_need'=>$final_category], 200);
     }
 
-    public function workshopcategory(){
+    public function workshopcategory() {
         try {
-            $workshopcategories = WorkShopCategory::select('name','slug','meta_title','description','keywords')->latest()->get();
-            if (empty($workshopcategories)) {
+            $workshopcategories = WorkShopCategory::select(
+                    'name',
+                    'slug',
+                    'type',
+                    'short_description',
+                    'cover_pic',
+                    'operative',
+                    'description',
+                    'meta_title',
+                    'keywords'
+                )
+                ->addSelect(\DB::raw("CONCAT('" . url('public/assets/back-end/work-shop/') .'/'. "', cover_pic) as cover_pic_path"))
+                ->latest()
+                ->get();
+
+            if ($workshopcategories->isEmpty()) {
                 return response()->json(['workshopcategories' => []], 200);
             }
+
+            // Convert to array for response and ensure the proper alias for cover_pic_path
+            $workshopcategories = $workshopcategories->map(function ($category) {
+                $category->cover_pic_path = $category->cover_pic_path ?? null;  // Ensuring it is null if no cover_pic
+                return $category;
+            });
+
             return response()->json(['workshopcategories' => $workshopcategories], 200);
         } catch (\Exception $e) {
             return response()->json(['workshopcategories' => []], 200);
