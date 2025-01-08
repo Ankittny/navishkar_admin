@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('work_shop_product', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('cat_id')->constrained('work_shop_category')->onDelete('cascade');
+            $table->foreignId('cat_id')->nullable()->constrained('work_shop_category')->onDelete('cascade');
             $table->string('image')->nullable();
             $table->string('slug', 255)->unique()->charset('utf8');
             $table->text('meta_description')->nullable();
