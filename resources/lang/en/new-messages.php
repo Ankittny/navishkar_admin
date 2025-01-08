@@ -8648,4 +8648,9 @@ return [
 	"cover_pic" => "Cover pic",
 	"operative" => "Operative",
 	"Content Writing Area" => "Content Writing Area",
+	"work_shop_products_image" => "Work shop products image",
+	"work_shop_product_added_successfully" => "Work shop product added successfully",
+	"update_work_shop_product_" => "Update work shop product ",
+	"update_work_shop_product" => "Update work shop product",
+	"work_shop_product_update_successfully" => "Work shop product update successfully",
 ];

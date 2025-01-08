@@ -15,7 +15,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body text-start">
-                    <form action="{{ route('admin.category.work-shop-add')}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.products.work-shop-product-add')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <ul class="nav nav-tabs w-fit-content mb-4">
                                 @foreach($languages as $lang)
@@ -56,29 +56,32 @@
                                         </div>
                                         <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : ''}} form-system-language-form" id="{{ $lang}}-form">
                                             <label class="title-color">{{ translate('meta_discription') }} ({{strtoupper($lang) }})</label>
-                                            <textarea name="description" class="form-control" placeholder="{{ translate('description_placeholder') }}"></textarea>
+                                            <textarea name="meta_description" class="form-control" placeholder="{{ translate('description_placeholder') }}"></textarea>
                                         </div>
                                         <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : ''}} form-system-language-form" id="{{ $lang}}-form">
                                             <label class="title-color">{{ translate('Keywords') }} ({{strtoupper($lang) }})</label>
                                             <input type="text" name="keywords" class="form-control" placeholder="{{ translate('keywords') }}">
                                         </div>
+                                        
                                         <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : '' }} form-system-language-form" id="{{ $lang }}-dropdown-form">
-                                            <label class="title-color">{{ translate('type') }} ({{ strtoupper($lang) }})</label>
-                                            <select class="form-control" name="type" id="dropdown">
-                                                <option>Select Type</option>
-                                                <option value="K-12 Offering">K-12 Offering</option>
-                                                <option value="Projects">Projects</option>
+                                            <label class="title-color">{{ translate('work_shop_category') }} ({{ strtoupper($lang) }})</label>
+                                            <select class="form-control" name="cat_id" id="dropdown">
+                                                <option>Select Work Shop Category</option>
+                                                @foreach($workshopcat as $cat)
+                                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
+
                                     @endforeach
-                                    <!-- <div class="from_part_2">
-                                        <label class="title-color">{{ translate('category_image') }}</label>
-                                        <span class="text-info"><span class="text-danger">*</span> {{ THEME_RATIO[theme_root_path()]['Category Image'] }}</span>
+                                    <div class="from_part_2">
+                                        <label class="title-color">{{ translate('cover_pic') }}</label>
+                                        <span class="text-info"><span class="text-danger">*</span> Cover Pic</span>
                                         <div class="custom-file text-left">
-                                            <input type="file" name="image" id="category-image" class="custom-file-input image-preview-before-upload" data-preview="#viewer" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required>
+                                            <input type="file" name="image-file" id="category-image" class="custom-file-input image-preview-before-upload" data-preview="#viewer" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required>
                                             <label class="custom-file-label" for="category-image">{{ translate('choose_File') }}</label>
                                         </div>
-                                    </div> -->
+                                    </div>
                                 </div>
                                 <div class="col-lg-6 mt-4 mt-lg-0 from_part_2">
                                     <div class="form-group">
@@ -153,11 +156,10 @@
                             <thead class="thead-light thead-50 text-capitalize">
                             <tr>
                                 <th>{{ translate('ID') }}</th>
-                                <th>{{ translate('name') }}</th>
-                                <th class="text-center">{{ translate('slug') }}</th>
+                                <th>{{ translate('title') }}</th>
+                                <th class="text-center">{{ translate('image') }}</th>
                                 <th class="text-center">{{ translate('meta_title') }}</th>
                                 <th class="text-center">{{ translate('keywords') }}</th>
-                                <th class="text-center">{{ translate('type') }}</th>
                                 <th class="text-center">{{ translate('action') }}</th>
                             </tr>
                             </thead>
@@ -165,23 +167,24 @@
                             @foreach($product as $key=>$category)
                                 <tr>
                                     <td>{{ $category['id'] }}</td>
-                                    <td>{{ $category['name'] }}</td>
-                                    <td class="text-center">
-                                        {{ $category['slug'] }}
+                                    <td>{{ $category['title'] }}</td>
+                                    <td class="d-flex justify-content-center">
+                                        <div class="avatar-60 d-flex align-items-center rounded">
+                                        <img class="img-fluid" alt="" src="{{ asset('public/assets/back-end/work-shop-product/' . $category['image']) }}">
+                                        </div>
                                     </td>
                                     <td class="text-center">
                                         {{ $category['meta_title'] }}
                                     </td>
                                     <td>{{$category['keywords']}}</td>
-                                    <td>{{$category['type']}}</td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-10">
                                             <a class="btn btn-outline-info btn-sm square-btn "
                                                title="{{ translate('edit') }}"
-                                               href="{{ route('admin.category.work-shop-get-update', ['id' => $category['id']]) }}">
+                                               href="{{ route('admin.products.work-shop-get-update-product', ['id' => $category['id']]) }}">
                                                 <i class="tio-edit"></i>
                                             </a>
-                                            <a class="btn btn-outline-danger btn-sm square-btn delete-work-shop"
+                                            <a class="btn btn-outline-danger btn-sm square-btn delete-work-shop-product"
                                                title="{{ translate('delete') }}"
                                                data-product-count = ""
                                                data-text=""
@@ -200,7 +203,7 @@
                         <div class="d-flex justify-content-lg-end">
                             {{ $product->links() }}
                         </div>
-                        <div style="display: none;" id="url-container" data-delete-url="{{ route('admin.category.work-shop-delete') }}"></div>
+                        <div style="display: none;" id="url-container" data-delete-url="{{ route('admin.products.work-shop-product-delete') }}"></div>
                     </div>
                     @if(count($product) == 0)
                         @include('layouts.back-end._empty-state',['text'=>'no_category_found'],['image'=>'default'])
@@ -252,7 +255,7 @@
 @endsection
 
 @push('script')
-    <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/work-shop-category.js') }}"></script>
+    <script src="{{ dynamicAsset(path: 'public/assets/back-end/js/work-shop-product.js') }}"></script>
     <script>
         $('.category-title-name').on('change keyup keypress', function () {
             var slugValue = $(this).val().replace(/\s+/g, '-');

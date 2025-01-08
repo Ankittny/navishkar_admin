@@ -145,4 +145,19 @@ enum Product
         URI => 'work-shop-product-view',
         VIEW => 'admin-views.product.work-shop.view',
     ];
+
+    const WORKSHOPPRODUCTADD = [
+        URI => 'work-shop-product-add',
+        VIEW => '',
+    ];
+    const WORKSHOPUPDATEPRODUCT = [
+        URI => 'update-work-shop-product/{id}',
+        VIEW => 'admin-views.product.work-shop.product-edit'
+    ];
+
+    const WORKSHOPUPPRODUCTDATA = [
+        URI => 'update-work-shop-product-data',
+        VIEW => ''
+    ];
+    
 }

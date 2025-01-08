@@ -61,12 +61,12 @@
                                 <textarea name="how_to_use" class="summernote {{ $lang == $defaultLanguage ? 'product-how_to_use-default-language' : '' }}">{{ old('details') }}</textarea>
                             </div>
                           
-                          <div class="form-group pt-2">
+                          <!-- <div class="form-group pt-2">
                                 <label class="title-color" for="{{ $lang }}_ingredients">
                                     {{ translate('Ingredients') }} ({{ strtoupper($lang) }})
                                 </label>
                                 <textarea class="summernote {{ $lang == $defaultLanguage ? 'product-ingredients-default-language' : '' }}" name="ingredients1">{{ old('features') }}</textarea>
-                            </div>
+                            </div> -->
                             <!-- Features -->
                             <div class="form-group pt-2">
                                 <label class="title-color" for="{{ $lang }}_features">
@@ -522,7 +522,7 @@
 
 
 
-            <div class="card mt-3 rest-part physical_product_show">
+            <!-- <div class="card mt-3 rest-part physical_product_show">
                 <div class="card-header">
                     <div class="d-flex gap-2">
                         <h4 class="mb-0">{{ translate('Ingredients') }}</h4>
@@ -539,7 +539,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
 
 

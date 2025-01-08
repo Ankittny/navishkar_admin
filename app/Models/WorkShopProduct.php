@@ -15,7 +15,7 @@ class WorkShopProduct extends Model
     // Allow mass assignment for these fields
     protected $fillable = [
         'id',
-        'name',
+        'title',
         'slug',
         'cat_id',
         'image',

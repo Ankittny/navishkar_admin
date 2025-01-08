@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Product;
 
 use App\Contracts\Repositories\AttributeRepositoryInterface;
 use App\Contracts\Repositories\BannerRepositoryInterface;
+use App\Contracts\Repositories\WorkShopRepositoryInterface;
 use App\Contracts\Repositories\BrandRepositoryInterface;
 use App\Contracts\Repositories\CartRepositoryInterface;
 use App\Contracts\Repositories\CategoryRepositoryInterface;
@@ -39,6 +40,8 @@ use App\Models\WorkShopProduct;
 use App\Models\WorkShopCategory;
 class ProductController extends BaseController
 {
+    protected $workShopRepository;
+    use FileManagerTrait;
     use FileManagerTrait {
         delete as deleteFile;
         update as updateFile;
@@ -61,8 +64,10 @@ class ProductController extends BaseController
         private readonly ReviewRepositoryInterface                  $reviewRepo,
         private readonly BannerRepositoryInterface                  $bannerRepo,
         private readonly ProductService                             $productService,
+        WorkShopRepositoryInterface $workShopRepository
     )
     {
+        $this->workShopRepository = $workShopRepository;
     }
 
     /**
@@ -696,5 +701,42 @@ class ProductController extends BaseController
             'defaultLanguage' => $defaultLanguage,
             'workshopcat'=>$workshopcat
         ]);
+    }
+
+    public function workShopProductAdd(Request $request){
+        $imageName = $this->upload('work-shop-product/', 'webp', $request->file('image-file'));
+        $request->merge(['image' => $imageName]);
+        $data = $request->only(['title', 'cat_id','image','slug','meta_description','meta_title','keywords','description','created_at','updated_at','created_at','updated_at']);
+        $workshop = $this->workShopRepository->createWorkShopproduct($data); 
+        Toastr::success(translate('work_shop_product_added_successfully'));
+        return back();
+    }
+
+    public function workShopGetUpdatePproduct(Request $request){
+        $workshopcat = WorkShopCategory::select('id','name','meta_title')->get();
+        $products = $this->workShopRepository->findWorkShopProductById($request->id);
+        $languages = getWebConfig(name: 'pnc_language') ?? null;
+        $defaultLanguage = $languages[0];
+        return view(Product::WORKSHOPUPDATEPRODUCT[VIEW], [
+            'product' => $products,
+            'languages' => $languages,
+            'defaultLanguage' => $defaultLanguage,
+            'workshopcat'=>$workshopcat
+        ]);
+    }
+
+    public function workShopProductUpdateData(Request $request){
+        $imageName = $this->upload('work-shop-product/', 'webp', $request->file('image-file'));
+        $request->merge(['image' => $imageName]);
+        $data = $request->only(['title', 'cat_id','image','slug','meta_description','meta_title','keywords','description','created_at','updated_at','created_at','updated_at']);
+        $this->workShopRepository->updateWorkShopProductData($request->id, $data); 
+        Toastr::success(translate('work_shop_product_update_successfully'));
+        return redirect()->route('admin.products.work-shop-product-home');
+    }
+
+    public function workShopProductDelete(Request $request){
+        $this->workShopRepository->deleteWorkShopProduct($request->workshop_id); 
+        Toastr::success(translate('work_shop_category_delete_successfully'));
+        return back();
     }
 }
