@@ -14,10 +14,14 @@ return new class extends Migration
         Schema::create('work_shop_category', function (Blueprint $table) {
             $table->id(); // Auto-incrementing primary key
             $table->string('name'); // Name of the category
-            $table->string('slug', 255)->unique()->charset('utf8'); // Slug (unique value for URL), max length of 255 characters
+            $table->string('slug', 255); // Slug (unique value for URL), max length of 255 characters
             $table->string('meta_title')->nullable(); // Meta title (nullable if not required)
             $table->text('description')->nullable(); // Description (nullable if not required)
             $table->string('keywords')->nullable(); // Keywords (nullable as it might not always be required)
+            $table->text('short_description')->nullable(); // Add nullable text field for short_description
+            $table->text('operative')->nullable(); // Add nullable text field for operative
+            $table->string('cover_pic')->nullable();
+            $table->string('type');
             $table->timestamps(); // Created at and updated at columns
         });
     }

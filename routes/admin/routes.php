@@ -259,6 +259,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin']],
             Route::get(Product::PRODUCT_GALLERY[URI], 'getProductGalleryView')->name('product-gallery');
             Route::get(Product::STOCK_LIMIT_STATUS[URI] . '/{type}', 'getStockLimitStatus')->name('stock-limit-status');
             Route::get(Product::WORKSHOPPRODUCT[URI], 'workShopProductHome')->name('work-shop-product-home');
+            Route::post(Product::WORKSHOPPRODUCTADD[URI], 'workShopProductAdd')->name('work-shop-product-add');
+            Route::get(Product::WORKSHOPUPDATEPRODUCT[URI],'workShopGetUpdatePproduct')->name('work-shop-get-update-product');
+            Route::post(Product::WORKSHOPUPPRODUCTDATA[URI],'workShopProductUpdateData')->name('work-shop-product-update-data');
+            Route::post(Category::WORKSHOPPRODUCTDELETE[URI],'workShopProductDelete')->name('work-shop-product-delete');
         });
     });
 
