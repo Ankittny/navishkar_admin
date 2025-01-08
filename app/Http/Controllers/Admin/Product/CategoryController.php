@@ -163,7 +163,11 @@ class CategoryController extends BaseController
           
     public function workShopAdd(Request $request)
     {   
-        $data = $request->only(['name', 'slug','meta_title','description','image','type','keywords','created_at','updated_at']);
+        $imageName = $this->upload('work-shop/', 'webp', $request->file('image-file'));
+
+        $request->merge(['cover_pic' => $imageName]);
+
+        $data = $request->only(['name', 'slug','meta_title','description','short_description','operative','cover_pic','image','type','keywords','created_at','updated_at']);
         $workshop = $this->workShopRepository->createWorkShop($data); 
         Toastr::success(translate('work_shop_category_added_successfully'));
         return back();
@@ -181,7 +185,9 @@ class CategoryController extends BaseController
     }
 
     public function workShopUpdateData(Request $request){
-        $data = $request->only(['name', 'slug','meta_title','description','type','keywords','created_at','updated_at']);
+        $imageName = $this->upload('work-shop/', 'webp', $request->file('image-file'));
+        $request->merge(['cover_pic' => $imageName]);
+        $data = $request->only(['name', 'slug','meta_title','description','short_description','operative','cover_pic','type','keywords','created_at','updated_at']);
         $this->workShopRepository->updateWorkShop($request->id, $data); 
         Toastr::success(translate('work_shop_category_update_successfully'));
         return redirect()->route('admin.category.work-shop-category');

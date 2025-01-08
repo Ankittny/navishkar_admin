@@ -17,7 +17,6 @@ class WorkShopCategory extends Model
         'id',
         'name',
         'slug',
-        'image',
         'type',
         'operative',
         'cover_pic',

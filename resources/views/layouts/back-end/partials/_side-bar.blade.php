@@ -298,7 +298,7 @@
                                     </li>
                                     <li class="nav-item {{Request::is('admin/category/'.Category::LIST[URI])?'active':''}}">
                                         <a class="nav-link " href="{{route('admin.category.work-shop-category')}}"
-                                           title="{{translate('sub_Sub_Categories')}}">
+                                           title="{{translate('work_shop_category')}}">
                                             <span class="tio-circle nav-indicator-icon"></span>
                                             <span
                                                 class="text-truncate">{{translate('work_shop_category')}}</span>
