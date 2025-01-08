@@ -74,10 +74,10 @@
                                         </div>
                                         <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : '' }} form-system-language-form" id="{{ $lang }}-dropdown-form">
                                             <label class="title-color">{{ translate('type') }} ({{ strtoupper($lang) }})</label>
-                                            <select class="form-control" name="type" id="dropdown">
+                                            <select class="form-control" name="type" id="dropdown" required>
                                                 <option>Select Type</option>
                                                 <option value="K-12 Offering">K-12 Offering</option>
-                                                <option value="Projects">Projects</option>
+                                                <option value="n-shop">N-Shop</option>
                                             </select>
                                         </div>
                                     @endforeach

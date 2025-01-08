@@ -60,17 +60,17 @@
                                         </div>
                                         <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : '' }} form-system-language-form" id="{{ $lang }}-dropdown-form">
                                             <label class="title-color">{{ translate('type') }} ({{ strtoupper($lang) }})</label>
-                                            <select class="form-control" name="type" id="dropdown">
+                                            <select class="form-control" name="type" id="dropdown" required>
                                                 <option>Select Type</option>
-                                                <option value="K-12 Offering">K-12 Offering</option>
-                                                <option value="Projects">Projects</option>
+                                                <option value="K-12 Offering" {{ $categories->type == 'K-12 Offering' ? 'selected' : '' }}>K-12 Offering</option>
+                                                <option value="n-shop" {{ $categories->type == 'n-shop' ? 'selected' : '' }}>N-Shop</option>
                                             </select>
                                         </div>
                                         <div class="from_part_2">
                                         <label class="title-color">{{ translate('cover_pic') }}</label>
                                         <span class="text-info"><span class="text-danger">*</span> Cover Pic</span>
                                         <div class="custom-file text-left">
-                                            <input type="file" name="image-file" id="category-image" class="custom-file-input image-preview-before-upload" data-preview="#viewer" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required>
+                                            <input type="file" name="image-file" id="category-image" class="custom-file-input image-preview-before-upload" data-preview="#viewer" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
                                             <label class="custom-file-label" for="category-image">{{ translate('choose_File') }}</label>
                                         </div>
                                     </div>
@@ -95,11 +95,11 @@
             </div>
         </div>
 
-        
+
     </div>
     <span id="route-admin-category-delete" data-url="{{ route('admin.category.delete') }}"></span>
     <span id="get-categories" data-categories="{{ json_encode($categories) }}"></span>
-    
+
 
 @endsection
 
