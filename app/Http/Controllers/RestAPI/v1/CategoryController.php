@@ -124,6 +124,7 @@ class CategoryController extends Controller
     public function workshopcategory() {
         try {
             $workshopcategories = WorkShopCategory::select(
+                    'id',
                     'name',
                     'slug',
                     'type',
@@ -160,6 +161,7 @@ class CategoryController extends Controller
         $cat_id = WorkShopCategory::where('slug', $slug)->first();
             if(!empty($cat_id)){
                     $workshopProducts = WorkShopProduct::select(
+                        'id',
                         'title',
                         'cat_id',
                         'image',
@@ -185,6 +187,7 @@ class CategoryController extends Controller
 
     public function workshopproductsdetails($slug){
         $workshopProducts = WorkShopProduct::select(
+            'id',
             'title',
             'cat_id',
             'image',
