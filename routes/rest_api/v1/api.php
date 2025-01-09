@@ -146,6 +146,7 @@ Route::group(['namespace' => 'RestAPI\v1', 'prefix' => 'v1', 'middleware' => ['a
                 Route::get('/find-what-you-need', 'find_what_you_need');
                 Route::get('/workshop-category','workshopcategory');
                 Route::get('/work-shop-products/{slug}','workshopproducts');
+                Route::get('/work-shop-details/{slug}','workshopproductsdetails');
             });
         });
 

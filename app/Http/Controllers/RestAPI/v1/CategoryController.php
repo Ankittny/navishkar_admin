@@ -183,4 +183,22 @@ class CategoryController extends Controller
         }
     }
 
+    public function workshopproductsdetails($slug){
+        $workshopProducts = WorkShopProduct::select(
+            'title',
+            'cat_id',
+            'image',
+            'slug',
+            'description',
+            'meta_description',
+            'meta_title',
+            'keywords'
+            )->addSelect(\DB::raw("CONCAT('" . url('public/assets/back-end/work-shop-product/') .'/'. "', image) as image_path"))
+            ->where('slug', $slug)->first();
+        if (empty($workshopProducts)) {
+            return response()->json(['status'=>false,'workshopproductsdetails' => []], 200);
+        }
+      return response()->json(['status'=>true,'workshopproductsdetails' => $workshopProducts], 200);
+    }
+
 }
