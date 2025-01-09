@@ -726,8 +726,10 @@ class ProductController extends BaseController
     }
 
     public function workShopProductUpdateData(Request $request){
-        $imageName = $this->upload('work-shop-product/', 'webp', $request->file('image-file'));
-        $request->merge(['image' => $imageName]);
+        if($request->file('image-file')){
+            $imageName = $this->upload('work-shop-product/', 'webp', $request->file('image-file'));
+            $request->merge(['image' => $imageName]);
+        }
         $data = $request->only(['title', 'cat_id','image','slug','meta_description','meta_title','keywords','description','created_at','updated_at','created_at','updated_at']);
         $this->workShopRepository->updateWorkShopProductData($request->id, $data); 
         Toastr::success(translate('work_shop_product_update_successfully'));
