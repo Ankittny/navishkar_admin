@@ -168,7 +168,7 @@ class CategoryController extends Controller
                         'meta_description',
                         'meta_title',
                         'keywords'
-                        )->addSelect(\DB::raw("CONCAT('" . url('public/assets/back-end/work-shop/work-shop-product/') .'/'. "', image) as image_path"))
+                        )->addSelect(\DB::raw("CONCAT('" . url('public/assets/back-end/work-shop-product/') .'/'. "', image) as image_path"))
                         ->where('cat_id', $cat_id->id)->get();
                     if ($workshopProducts->isEmpty()) {
                         return response()->json(['status'=>false,'workshopproducts' => []], 200);
