@@ -70,7 +70,7 @@
                                         <label class="title-color">{{ translate('cover_pic') }}</label>
                                         <span class="text-info"><span class="text-danger">*</span> Cover Pic</span>
                                         <div class="custom-file text-left">
-                                            <input type="file" name="image-file" id="category-image" class="custom-file-input image-preview-before-upload" data-preview="#viewer" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+                                            <input type="file" name="image-file" id="category-image" value="{{ $categories->cover_pic }}" class="custom-file-input image-preview-before-upload" data-preview="#viewer" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
                                             <label class="custom-file-label" for="category-image">{{ translate('choose_File') }}</label>
                                         </div>
                                     </div>
@@ -79,7 +79,7 @@
                                 <div class="col-lg-6 mt-4 mt-lg-0 from_part_2">
                                     <div class="form-group">
                                         <div class="text-center mx-auto">
-                                            <img class="upload-img-view" id="viewer" alt="" src="{{ dynamicAsset(path: 'public/assets/back-end/img/image-place-holder.png') }}">
+                                        <img class="upload-img-view" id="viewer" alt="" src="{{ asset('public/assets/back-end/work-shop/'. $categories->cover_pic) }}">
                                         </div>
                                     </div>
                                 </div>

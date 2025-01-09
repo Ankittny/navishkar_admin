@@ -185,8 +185,10 @@ class CategoryController extends BaseController
     }
 
     public function workShopUpdateData(Request $request){
-        $imageName = $this->upload('work-shop/', 'webp', $request->file('image-file'));
-        $request->merge(['cover_pic' => $imageName]);
+        if($request->file('image-file')){
+            $imageName = $this->upload('work-shop/', 'webp', $request->file('image-file'));
+            $request->merge(['cover_pic' => $imageName]);
+        }
         $data = $request->only(['name', 'slug','meta_title','description','short_description','operative','cover_pic','type','keywords','created_at','updated_at']);
         $this->workShopRepository->updateWorkShop($request->id, $data); 
         Toastr::success(translate('work_shop_category_update_successfully'));
