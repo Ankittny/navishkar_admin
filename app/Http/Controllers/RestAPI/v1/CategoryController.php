@@ -124,6 +124,7 @@ class CategoryController extends Controller
     public function workshopcategory() {
         try {
             $workshopcategories = WorkShopCategory::select(
+                    'id',
                     'name',
                     'slug',
                     'type',
@@ -160,6 +161,7 @@ class CategoryController extends Controller
         $cat_id = WorkShopCategory::where('slug', $slug)->first();
             if(!empty($cat_id)){
                     $workshopProducts = WorkShopProduct::select(
+                        'id',
                         'title',
                         'cat_id',
                         'image',
@@ -181,6 +183,25 @@ class CategoryController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Unable to fetch workshop products'], 500);
         }
+    }
+
+    public function workshopproductsdetails($slug){
+        $workshopProducts = WorkShopProduct::select(
+            'id',
+            'title',
+            'cat_id',
+            'image',
+            'slug',
+            'description',
+            'meta_description',
+            'meta_title',
+            'keywords'
+            )->addSelect(\DB::raw("CONCAT('" . url('public/assets/back-end/work-shop-product/') .'/'. "', image) as image_path"))
+            ->where('slug', $slug)->first();
+        if (empty($workshopProducts)) {
+            return response()->json(['status'=>false,'workshopproductsdetails' => []], 200);
+        }
+      return response()->json(['status'=>true,'workshopproductsdetails' => $workshopProducts], 200);
     }
 
 }

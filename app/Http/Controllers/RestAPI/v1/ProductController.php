@@ -208,6 +208,14 @@ class ProductController extends Controller
             $product['inhouse_vacation_start_date'] = $inhouse_vacation_start_date;
             $product['inhouse_vacation_end_date'] = $inhouse_vacation_end_date;
             $product['inhouse_temporary_close'] = $inhouse_temporary_close;
+            $product['images_new'] = Product::select('images')->first();
+            if ($product['images_new']) {
+                $imagesArray = json_decode($product['images_new']->images, true); // Decode the JSON string into an array
+                foreach ($imagesArray as &$image) {
+                    $image['url'] = url('public/assets/back-end/product/' . $image['image_name']);
+                }
+                $product['images_new'] = $imagesArray;
+            }
             $product['reviews_count'] = $product->reviews->count();
         }
         return response()->json($product, 200);
