@@ -88,7 +88,12 @@ class CategoryController extends Controller
 
     public function get_products(Request $request, $id): JsonResponse
     {
-        return response()->json(Helpers::product_data_formatting(CategoryManager::products($id, $request), true), 200);
+        $catdata = Category::where('slug',$id)->first();
+        if(!empty($catdata)){
+            return response()->json(Helpers::product_data_formatting(CategoryManager::products($catdata->id, $request), true), 200);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Data Not Found'], 200);
+        }
     }
 
     public function find_what_you_need()
