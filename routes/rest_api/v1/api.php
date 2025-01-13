@@ -9,6 +9,7 @@ use App\Http\Controllers\RestAPI\v1\FlashDealController;
 use App\Http\Controllers\RestAPI\v1\OrderController;
 use App\Http\Controllers\RestAPI\v1\ProductController;
 use App\Http\Controllers\RestAPI\v1\SellerController;
+use App\Http\Controllers\RestAPI\v1\DataController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\PaymentController;
 
@@ -308,4 +309,11 @@ Route::group(['namespace' => 'RestAPI\v1', 'prefix' => 'v1', 'middleware' => ['a
 
     Route::post('contact-us', 'GeneralController@contact_store');
     Route::put('customer/language-change', 'CustomerController@language_change')->middleware('auth:api');
+
+
+    Route::post('innovations_enquiry_create', 'DataController@innovations_enquiry_create');
 });
+
+
+
+
