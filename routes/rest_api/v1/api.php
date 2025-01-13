@@ -309,9 +309,8 @@ Route::group(['namespace' => 'RestAPI\v1', 'prefix' => 'v1', 'middleware' => ['a
 
     Route::post('contact-us', 'GeneralController@contact_store');
     Route::put('customer/language-change', 'CustomerController@language_change')->middleware('auth:api');
-
-
     Route::post('innovations_enquiry_create', 'DataController@innovations_enquiry_create');
+    Route::post('be_partner_with', 'DataController@BePartnerWith');
 });
 
 
