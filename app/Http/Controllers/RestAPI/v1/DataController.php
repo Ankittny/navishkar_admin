@@ -4,8 +4,8 @@ namespace App\Http\Controllers\RestAPI\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Data;
-
+use App\Models\{BePartnerWithUs,Data};
+use Validator;
 class DataController extends Controller
 {
     public function innovations_enquiry()
@@ -18,7 +18,7 @@ class DataController extends Controller
     {
         try {
             // Validate the incoming request data
-            $validatedData = $request->validate([
+            $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'contact_no' => 'required|string|max:15',
@@ -30,24 +30,64 @@ class DataController extends Controller
                 'options' => 'nullable|string|max:255',
                 'description' => 'nullable|string|max:1000',
             ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validation failed.',
+                    'errors' => $validator->errors(),
+                ], 200);
+            }
+
             // Create a new Data instance and save validated data
             $data = new Data();
-            $data->fill($validatedData);
+            $data->fill($request->all());
             $data->save();
+
             // Return a JSON response
             return response()->json([
                 'status' => true,
                 'message' => 'Enquiry successfully saved.',
             ], 200);
-        } catch (ValidationException $e) {
-            // Return validation errors in a custom JSON format
+        } catch (\Exception $e) {
+            // Return a JSON response
             return response()->json([
                 'status' => false,
                 'message' => 'Validation failed.',
-                'errors' => $e->errors(),
+                'errors' => $e->getMessage(),
             ], 200);
         }
     }
 
+    public function BePartnerWith(Request $request){
+        $validator = Validator::make($request->all(), [
+            'oraganization_name' => 'required|string|max:255',
+            'location' => 'required',
+            'official_email' => 'required|email|max:255',
+            'contact_number' => 'required|string|max:15',
+            'querry_description' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+            ], 200);
+        }
+
+        $data = new BePartnerWithUs();
+        $data->oraganization_name = $request->oraganization_name;
+        $data->location = $request->location;
+        $data->official_email = $request->official_email;
+        $data->contact_number = $request->contact_number;
+        $data->querry_description = $request->querry_description;
+        $data->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Enquiry successfully saved.',
+        ], 200);
+    }
 
 }
