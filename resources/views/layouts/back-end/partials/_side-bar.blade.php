@@ -76,7 +76,7 @@
                                     style="display: {{Request::is('admin/innovationenquiry*')?'block':'none'}}">
                                     <li class="nav-item "
                                         title="{{translate('add_new')}}">
-                                       
+
                                     </li>
                                     <li class="nav-item "
                                         title="{{translate('list')}}">
@@ -677,6 +677,23 @@
                             </span>
                                 </a>
                             </li>
+
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/be-partner-with*')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                   href="#"
+                                   title="{{translate('Be_come_partner_with')}}">
+                                    <i class="tio-support nav-icon"></i>
+                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                <span class="position-relative">
+                                    {{translate('Be_come_partner_with')}}
+                                    @if(\App\Models\SupportTicket::where('status','open')->count()>0)
+                                        <span class="btn-status btn-xs-status btn-status-danger position-absolute top-0 menu-status"></span>
+                                    @endif
+                                </span>
+                            </span>
+                                </a>
+                            </li>
+
                         @endif
                         @if(Helpers::module_permission_check('report'))
                             <li class="nav-item {{(Request::is('admin/report/earning') || Request::is('admin/report/'.InhouseProductSale::VIEW[URI]) || Request::is('admin/report/vendor-report') || Request::is('admin/report/earning') || Request::is('admin/transaction/list') || Request::is('admin/refund-section/refund-list') || Request::is('admin/stock/product-in-wishlist') || Request::is('admin/reviews*') || Request::is('admin/stock/product-stock') || Request::is('admin/transaction/wallet-bonus') || Request::is('admin/report/order')) ? 'scroll-here':''}}">

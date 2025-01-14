@@ -765,8 +765,8 @@ class UserProfileController extends Controller
         }
         return back();
     }
-  
-  
+
+
    public function cancelWaybill($id){
         $order = Order::where('id',$id)->first();
         $client = new Client();
