@@ -345,6 +345,8 @@ return [
 	"system" => "System",
 	"POS" => "POS",
 	"innovationenquiry" => "InnovationEnquiry",
+	"Be_partner_with" => "Be partner with",
+	"Organization Name" => "Organization Name",
 	"sign_out" => "Sign out",
 	"item" => "Item",
 	"addon" => "Addon",

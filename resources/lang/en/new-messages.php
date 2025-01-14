@@ -8680,4 +8680,13 @@ return [
 	"Enter Description" => "Enter Description",
 	"Enquiry List" => "Enquiry List",
 	"Edit Innovation Enquiry" => "Edit Innovation Enquiry",
+	"Be_come_partner_with" => "Be come partner with",
+	"Be_partner_with" => "Be partner with",
+	"Be Partner With" => "Be Partner With",
+	"Oraganization Name" => "Oraganization Name",
+	"Location" => "Location",
+	"Official Mail" => "Official Mail",
+	"Query Description" => "Query Description",
+	"Organization Name" => "Organization Name",
+	"No enquiries found" => "No enquiries found",
 ];
