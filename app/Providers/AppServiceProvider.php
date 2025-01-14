@@ -30,6 +30,8 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\Contracts\Repositories\InnovationEnquiryRepositoryInterface;
+use App\Repositories\InnovationEnquiryRepository;
 
 ini_set('memory_limit',-1);
 ini_set('upload_max_filesize','180M');
@@ -52,6 +54,7 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->isLocal()) {
             $this->app->register(\Amirami\Localizator\ServiceProvider::class);
         }
+        $this->app->bind(InnovationEnquiryRepositoryInterface::class, InnovationEnquiryRepository::class);
     }
 
     /**
