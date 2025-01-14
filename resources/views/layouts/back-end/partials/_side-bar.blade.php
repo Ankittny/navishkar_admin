@@ -65,28 +65,7 @@
                                 </a>
                             </li>
                         @endif
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/innovationenquiry*')?'active':''}}">
-                                <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
-                                   href="javascript:" title="{{translate('innovationenquiry')}}">
-                                    <i class="tio-search nav-icon"></i>
-                                    <span
-                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('innovationenquiry')}}</span>
-                                </a>
-                                <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
-                                    style="display: {{Request::is('admin/innovationenquiry*')?'block':'none'}}">
-                                    <li class="nav-item "
-                                        title="{{translate('add_new')}}">
 
-                                    </li>
-                                    <li class="nav-item "
-                                        title="{{translate('list')}}">
-                                        <a class="nav-link " href="{{route('admin.innovationenquiry.list')}}">
-                                            <span class="tio-circle nav-indicator-icon"></span>
-                                            <span class="text-truncate">{{translate('list')}}</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
                         @if(Helpers::module_permission_check('order_management'))
                             <li class="nav-item {{Request::is('admin/orders*')?((Request::is('admin/orders/details/*') && request()->has('vendor-order-list')) ? '' : 'scroll-here'):''}}">
                                 <small class="nav-subtitle" title="">{{translate('order_management')}}</small>
@@ -680,19 +659,38 @@
 
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin/be-partner-with*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                   href="#"
-                                   title="{{translate('Be_come_partner_with')}}">
+                                   href="{{route('admin.innovationenquiry.list')}}"
+                                   title="{{translate('innovationenquiry')}}">
                                     <i class="tio-support nav-icon"></i>
-                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                    <span class="navbar-vertical-aside-mini-mode-hidden-el
+                                    ements text-truncate">
                                 <span class="position-relative">
-                                    {{translate('Be_come_partner_with')}}
+                                    {{translate('innovationenquiry')}}
                                     @if(\App\Models\SupportTicket::where('status','open')->count()>0)
-                                        <span class="btn-status btn-xs-status btn-status-danger position-absolute top-0 menu-status"></span>
+                                        <!-- <span class="btn-status btn-xs-status btn-status-danger position-absolute top-0 menu-status"></span> -->
                                     @endif
                                 </span>
                             </span>
                                 </a>
                             </li>
+
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/be-partner-with*')?'active':''}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                   href="{{route('admin.bepartnerwith.list')}}"
+                                   title="{{translate('Be_partner_with')}}">
+                                    <i class="tio-support nav-icon"></i>
+                                    <span class="navbar-vertical-aside-mini-mode-hidden-el
+                                    ements text-truncate">
+                                <span class="position-relative">
+                                    {{translate('Be_partner_with')}}
+                                    @if(\App\Models\SupportTicket::where('status','open')->count()>0)
+                                        <!-- <span class="btn-status btn-xs-status btn-status-danger position-absolute top-0 menu-status"></span> -->
+                                    @endif
+                                </span>
+                            </span>
+                                </a>
+                            </li>
+                        </li>
 
                         @endif
                         @if(Helpers::module_permission_check('report'))

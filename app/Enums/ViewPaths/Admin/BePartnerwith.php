@@ -2,12 +2,13 @@
 
 namespace App\Enums\ViewPaths\Admin;
 
-enum InnovationEnquiry
+enum BePartnerWith
 {
     const LIST = [
         URI => 'list',
-        VIEW => 'admin-views.innovationenquiry.list'
+        VIEW => 'admin-views.bepartnerwith.list'
     ];
+   
    
 
     const DELETE = [
