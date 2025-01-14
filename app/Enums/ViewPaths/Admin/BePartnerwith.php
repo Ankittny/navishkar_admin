@@ -10,7 +10,7 @@ enum BePartnerWith
     ];
    
    
-
+     
     const DELETE = [
         URI => 'delete',
         VIEW => ''
