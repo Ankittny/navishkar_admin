@@ -6,7 +6,7 @@ use App\Enums\ViewPaths\Admin\Attribute;
 use App\Enums\ViewPaths\Admin\Banner;
 use App\Enums\ViewPaths\Admin\Brand;
 use App\Enums\ViewPaths\Admin\BusinessSettings;
-use App\Enums\ViewPaths\Admin\Cart;
+use App\Enums\ViewPaths\Admin\{Cart,InnovationEnquiry};
 use App\Enums\ViewPaths\Admin\Category;
 use App\Enums\ViewPaths\Admin\Chatting;
 use App\Enums\ViewPaths\Admin\Contact;
@@ -163,6 +163,7 @@ use App\Http\Controllers\Admin\TransactionReportController;
 use App\Http\Controllers\Admin\Vendor\VendorController;
 use App\Http\Controllers\Admin\Vendor\WithdrawalMethodController;
 use App\Http\Controllers\Admin\VendorProductSaleReportController;
+use App\Http\Controllers\Admin\InnovationEnquiryController;
 use App\Http\Controllers\SharedController;
 use Illuminate\Support\Facades\Route;
 
@@ -1143,5 +1144,22 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin']],
         });
     });
 
+
+//InnovationEnquiry
+Route::group(['prefix' => 'innovationenquiry', 'as' => 'innovationenquiry.', 'middleware' => ['module:product_management']], function () {
+    Route::controller(InnovationEnquiryController::class)->group(function () {
+        Route::get(InnovationEnquiry::LIST[URI], 'list')->name('list');
+        Route::get(InnovationEnquiry::ADD[URI], 'add')->name('add-new');
+        Route::post('store', 'store')->name('store');
+        Route::put(InnovationEnquiry::UPDATE[URI] . '/{id}', 'getEditView')->name('edit');
+        Route::post(InnovationEnquiry::UPDATE[URI] . '/{id}', 'update')->name('update');
+        Route::get(InnovationEnquiry::DELETE[URI] . '/{id}', 'delete')->name('delete');
+    });
 });
+});
+
+
+
+
+
 

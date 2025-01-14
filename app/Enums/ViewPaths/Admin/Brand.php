@@ -17,6 +17,7 @@ enum Brand
         URI => 'update',
         VIEW => 'admin-views.brand.edit'
     ];
+    
 
     const DELETE = [
         URI => 'delete',
