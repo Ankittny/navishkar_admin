@@ -4,7 +4,6 @@
 
 @section('content')
 
-
     <!-- Table Section -->
     <div class="row mt-4">
         <div class="col-md-12">
@@ -51,6 +50,10 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="table-responsive mt-4">
+                        <div class="d-flex justify-content-lg-end">
+                            {{ $data->links() }}
+                        </div>
                 </div>
             </div>
         </div>

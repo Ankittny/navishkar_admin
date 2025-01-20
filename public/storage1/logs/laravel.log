@@ -3970,5 +3970,4 @@
 #35 /home/healthandblossom/htdocs/healthandblossom.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
 #36 /home/healthandblossom/htdocs/healthandblossom.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
 #37 /home/healthandblossom/htdocs/healthandblossom.com/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle()
-#38 {main}
-"} 
+

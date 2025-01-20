@@ -3,7 +3,7 @@
 use App\Http\Controllers\RestAPI\v1\BrandController;
 use App\Http\Controllers\RestAPI\v1\CartController;
 use App\Http\Controllers\RestAPI\v1\CategoryController;
-use App\Http\Controllers\RestAPI\v1\CustomerController;
+use App\Http\Controllers\RestAPI\v1\CustomerController ;
 use App\Http\Controllers\RestAPI\v1\DealController;
 use App\Http\Controllers\RestAPI\v1\FlashDealController;
 use App\Http\Controllers\RestAPI\v1\OrderController;

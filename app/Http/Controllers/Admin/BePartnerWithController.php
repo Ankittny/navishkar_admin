@@ -19,17 +19,16 @@ class BePartnerWithController extends Controller
 
     public function list(): View
     {
-        $bepartnerwithus = $this->repository->getAllEnquiries();  
+        $bepartnerwithus = $this->repository->getAllEnquiries()->paginate(10);
 
         return view(
-            'admin-views.bepartnerwith.list',  
+            'admin-views.bepartnerwith.list',
             [
-                'bepartnerwithus' => $bepartnerwithus,  
-                'totalbepartnerwithus' => $bepartnerwithus->count(), 
+                'bepartnerwithus' => $bepartnerwithus,
+                'totalbepartnerwithus' => $bepartnerwithus->count(),
             ]
         );
     }
-
     public function delete($id)
     {
         $this->repository->deleteEnquiry($id);  
