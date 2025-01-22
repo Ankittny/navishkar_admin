@@ -34,6 +34,8 @@ use App\Contracts\Repositories\InnovationEnquiryRepositoryInterface;
 use App\Repositories\InnovationEnquiryRepository;
 use App\Contracts\Repositories\BePartnerWithRepositoryInterface;
 use App\Repositories\BePartnerWithRepository;
+use App\Contracts\Repositories\{BlogCategoryInterface,BlogInterface};
+use App\Repositories\{BlogCategoryRepository,BlogRepository};
 
 ini_set('memory_limit',-1);
 ini_set('upload_max_filesize','180M');
@@ -58,6 +60,8 @@ class AppServiceProvider extends ServiceProvider
         }
         $this->app->bind(InnovationEnquiryRepositoryInterface::class, InnovationEnquiryRepository::class);
         $this->app->bind(BePartnerWithRepositoryInterface::class, BePartnerWithRepository::class);
+        $this->app->bind(BlogCategoryInterface::class, BlogCategoryRepository::class);
+        $this->app->bind(BlogInterface::class, BlogRepository::class);
     }
 
     /**

@@ -19,13 +19,13 @@ class InnovationEnquiryController extends Controller
 
     public function list(): View
     {
-        $data = $this->repository->getAllEnquiries(); 
+        $data = $this->repository->getAllEnquiries()->paginate(10);
 
         return view(
-            'admin-views.innovationenquiry.list',  
+            'admin-views.innovationenquiry.list',
             [
-                'data' => $data,  
-                'totalData' => $data->count(), 
+                'data' => $data,
+                'totalData' => $data->count(),
             ]
         );
     }

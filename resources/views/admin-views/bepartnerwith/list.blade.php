@@ -50,6 +50,11 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="table-responsive mt-4">
+                        <div class="d-flex justify-content-lg-end">
+                            {{ $bepartnerwithus->links() }}
+                        </div>
+                    </div>
             </div>
         </div>
     </div>

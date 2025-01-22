@@ -140,6 +140,7 @@ class PaymentMethodController extends BaseController
         if ($request['status'] == 1) {
             $gateway = $this->settingRepo->getFirstWhere(params: ['key_name' => $request['gateway'], 'settings_type' => 'payment_config']);
             if ($gateway) {
+    
                 $paymentPublishedStatus = config('get_payment_publish_status') ?? 0;
                 $paymentGatewayPublishedStatus = isset($paymentPublishedStatus[0]['is_published']) ? $paymentPublishedStatus[0]['is_published'] : 0;
                 $paymentGatewaysList = $this->settingRepo->getListWhereIn(

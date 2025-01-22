@@ -6,7 +6,7 @@ use App\Enums\ViewPaths\Admin\Attribute;
 use App\Enums\ViewPaths\Admin\Banner;
 use App\Enums\ViewPaths\Admin\Brand;
 use App\Enums\ViewPaths\Admin\BusinessSettings;
-use App\Enums\ViewPaths\Admin\{Cart,InnovationEnquiry};
+use App\Enums\ViewPaths\Admin\{Cart,InnovationEnquiry,Blog};
 use App\Enums\ViewPaths\Admin\BePartnerWith;
 use App\Enums\ViewPaths\Admin\Category;
 use App\Enums\ViewPaths\Admin\Chatting;
@@ -122,7 +122,7 @@ use App\Http\Controllers\Admin\Promotion\FeaturedDealController;
 use App\Http\Controllers\Admin\Promotion\FlashDealController;
 use App\Http\Controllers\Admin\Promotion\MostDemandedController;
 use App\Http\Controllers\Admin\Report\RefundTransactionController;
-use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\{ReportController,BlogController};
 use App\Enums\ViewPaths\Admin\Hsn;
 use App\Http\Controllers\Admin\Hsn\HsnController;
 use App\Http\Controllers\Admin\Settings\AddonController;
@@ -653,6 +653,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin']],
         });
     });
     /* end notification */
+
+    Route::controller(BlogController::class)->group(function (){
+        Route::get('blog/cat_list', 'index')->name('home-blog');
+        Route::get('blog/blog_list', 'blog_list_index')->name('blog-list-blog');
+        Route::post(Blog::AAD[URI], 'add')->name('blog-add');
+        Route::post(Blog::AAD1[URI], 'addBlog')->name('blog-home-add');
+        Route::get('blog/update-blog/{id}', 'getUpdateView')->name('update-blog');
+        Route::get('blog/update-blog-show/{id}', 'blogUpdatehome')->name('update-blog-view');
+        Route::post('blog/update-blog', 'updatedata')->name('update-blog-data');
+        Route::post('blog/update-blog-home', 'blogUpdatedata')->name('update-blog-data-home');
+        Route::post('blog-delete', 'delete')->name('blog-delete');
+        Route::post('blog-home-delete', 'delete_home')->name('blog-home-delete');
+    });
+
 
     Route::group(['prefix' => 'support-ticket', 'as' => 'support-ticket.','middleware'=>['module:support_section']], function () {
         Route::controller(SupportTicketController::class)->group(function (){
