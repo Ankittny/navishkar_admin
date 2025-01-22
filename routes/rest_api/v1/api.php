@@ -10,6 +10,7 @@ use App\Http\Controllers\RestAPI\v1\OrderController;
 use App\Http\Controllers\RestAPI\v1\ProductController;
 use App\Http\Controllers\RestAPI\v1\SellerController;
 use App\Http\Controllers\RestAPI\v1\DataController;
+use App\Http\Controllers\RestAPI\v1\BlogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer\PaymentController;
 
@@ -158,6 +159,7 @@ Route::group(['namespace' => 'RestAPI\v1', 'prefix' => 'v1', 'middleware' => ['a
             });
         });
 
+        
         Route::group(['prefix' => 'customer'], function () {
             Route::put('cm-firebase-token', 'CustomerController@update_cm_firebase_token');
 
@@ -311,6 +313,15 @@ Route::group(['namespace' => 'RestAPI\v1', 'prefix' => 'v1', 'middleware' => ['a
     Route::put('customer/language-change', 'CustomerController@language_change')->middleware('auth:api');
     Route::post('innovations_enquiry_create', 'DataController@innovations_enquiry_create');
     Route::post('be_partner_with', 'DataController@BePartnerWith');
+
+    
+    Route::post('blog_create', 'BlogController@blog_create');
+    Route::post('blog_category_create', 'BlogController@blog_category_create');
+    Route::get('get_blog', 'BlogController@get_blog');
+    Route::get('get_blog_categorie', 'BlogController@get_blog_categorie');
+    Route::get('/blog_details/{slug}','BlogController@blog_details');
+
+
 });
 
 

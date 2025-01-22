@@ -8701,4 +8701,5 @@ return [
 	"blog_category_added_successfully" => "Blog category added successfully",
 	"blog_edit_category" => "Blog edit category",
 	"blog_deleted_successfully" => "Blog deleted successfully",
+	"Edit_blog_list" => "Edit blog list",
 ];
