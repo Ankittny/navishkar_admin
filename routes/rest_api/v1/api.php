@@ -101,6 +101,7 @@ Route::group(['namespace' => 'RestAPI\v1', 'prefix' => 'v1', 'middleware' => ['a
         Route::controller(ProductController::class)->group(function () {
             Route::get('reviews/{product_id}', 'get_product_reviews');
             Route::get('rating/{product_id}', 'get_product_rating');
+            Route::get('getReviewList','getReviewList');
             Route::get('counter/{product_id}', 'counter');
             Route::get('shipping-methods', 'get_shipping_methods');
             Route::get('social-share-link/{product_id}', 'social_share_link');
@@ -168,8 +169,9 @@ Route::group(['namespace' => 'RestAPI\v1', 'prefix' => 'v1', 'middleware' => ['a
 
             Route::group(['prefix' => 'address'], function () {
                 Route::post('add', 'CustomerController@add_new_address');
+
                 Route::get('list', 'CustomerController@address_list');
-                Route::delete('/', 'CustomerController@delete_address');
+                Route::delete('/delete_address', 'CustomerController@delete_address');
             });
 
             Route::group(['prefix' => 'order'], function () {
