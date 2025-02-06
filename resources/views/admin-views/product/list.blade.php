@@ -198,7 +198,8 @@
                                         {{ translate(str_replace('_',' ',$product['product_type'])) }}
                                     </td>
                                     <td class="text-center">
-                                        {{setCurrencySymbol(amount: usdToDefaultCurrency(amount: $product['unit_price']), currencyCode: getCurrencyCode()) }}
+                                        {{ setCurrencySymbol($product['unit_price'])}}
+                                        {{-- sdfsfd{{setCurrencySymbol(amount: usdToDefaultCurrency(amount: $product['unit_price']), currencyCode: getCurrencyCode()) }} --}}
                                     </td>
                                     <td class="text-center">
 

@@ -8,7 +8,7 @@ use Intervention\Image\Facades\Image;
 
 trait FileManagerTrait
 {
-    /** 
+    /**
      * Upload method working for image
      * @param string $dir
      * @param string $format
@@ -22,7 +22,7 @@ trait FileManagerTrait
             mkdir($basePath, 0775, true);
         }
         if (!is_null($image)) {
-            $isOriginalImage = in_array($image->getClientOriginalExtension(), ['gif', 'svg']);
+            $isOriginalImage = in_array($image->getClientOriginalExtension(), ['gif', 'svg','pdf']);
             $imageName = Carbon::now()->toDateString() . "-" . uniqid() . "." . ($isOriginalImage ? $image->getClientOriginalExtension() : $format);
 
             if ($isOriginalImage) {

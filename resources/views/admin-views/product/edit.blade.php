@@ -63,62 +63,31 @@
                                 <textarea name="description[]" class="summernote {{ $language == 'en' ? 'product-description-default-language' : '' }}"
                                 >{!! $translate[$language]['description']??$product['details'] !!}</textarea>
                             </div>
-                          
+
                             <div class="form-group pt-4">
-                                <label class="title-color">{{ translate('How to Use') }}
+                                <label class="title-color">{{ translate('Short_description') }}
                                     ({{strtoupper($language) }})</label>
-                                <textarea name="how_to_use" class="summernote {{ $language == 'en' ? 'product-how_to_use-default-language' : '' }}"
-                                >{!! $translate[$language]['how_to_use']??$product['how_to_use'] !!}</textarea>
+                                <textarea name="short_description" class="summernote {{ $language == 'en' ? 'product-short_description-default-language' : '' }}"
+                                >{!! $translate[$language]['short_description']??$product['short_description'] !!}</textarea>
                             </div>
-                          
+
                            <div class="form-group pt-4">
                                 <label class="title-color">
-                                    {{ translate('Ingredients') }} ({{ strtoupper($language) }})
+                                    {{ translate('What_is_inside_the_Box') }} ({{ strtoupper($language) }})
                                 </label>
-                                <textarea name="ingredients1" class="summernote {{ $language == 'en' ? 'product-ingredients1-default-language' : '' }}">
-                                    {!! $translate[$language]['ingredients1'] ?? $product['ingredients1'] !!}
+                                <textarea name="what_is_inside_the_box" class="summernote {{ $language == 'en' ? 'product-what_is_inside_the_box-default-language' : '' }}">
+                                    {!! $translate[$language]['what_is_inside_the_box'] ?? $product['what_is_inside_the_box'] !!}
                                 </textarea>
                             </div>
                             <!-- Features -->
                             <div class="form-group pt-4">
                                 <label class="title-color">
-                                    {{ translate('Features') }} ({{ strtoupper($language) }})
+                                    {{ translate('Additional_Tools') }} ({{ strtoupper($language) }})
                                 </label>
-                                <textarea name="features" class="summernote {{ $language == 'en' ? 'product-features-default-language' : '' }}">
-                                    {!! $translate[$language]['features'] ?? $product['features'] !!}
+                                <textarea name="additional_tools" class="summernote {{ $language == 'en' ? 'product-additional_tools-default-language' : '' }}">
+                                    {!! $translate[$language]['additional_tools'] ?? $product['additional_tools'] !!}
                                 </textarea>
                             </div>
-                            
-                            <!-- Disclaimer -->
-                            <div class="form-group pt-4">
-                                <label class="title-color">
-                                    {{ translate('Disclaimer') }} ({{ strtoupper($language) }})
-                                </label>
-                                <textarea name="disclaimer" class="summernote {{ $language == 'en' ? 'product-disclaimer-default-language' : '' }}">
-                                    {!! $translate[$language]['disclaimer'] ?? $product['disclaimer'] !!}
-                                </textarea>
-                            </div>
-                          
-                          
-                          <!-- Return Policy -->
-                            <div class="form-group pt-4">
-                                <label class="title-color">
-                                    {{ translate('Return Policy') }} ({{ strtoupper($language) }})
-                                </label>
-                                <textarea name="return_policy" class="summernote {{ $language == 'en' ? 'product-return_policy-default-language' : '' }}">
-                                    {!! $translate[$language]['return_policy'] ?? $product['return_policy'] !!}
-                                </textarea>
-                            </div>
-                            <!-- Feature Key -->
-                            <div class="form-group pt-4">
-                                <label class="title-color">
-                                    {{ translate('feature_key') }} ({{ strtoupper($language) }})
-                                </label>
-                                <textarea name="feature_key" class="summernote {{ $language == 'en' ? 'product-feature_key-default-language' : '' }}">
-                                    {!! $translate[$language]['feature_key'] ?? $product['feature_key'] !!}
-                                </textarea>
-                            </div>
-                          
                         </div>
                     @endforeach
                 </div>
@@ -309,7 +278,7 @@
                                 <input type="number" min="0" step="0.01"
                                        placeholder="{{ translate('purchase_price') }}"
                                        name="purchase_price" class="form-control"
-                                       value={{ usdToDefaultCurrency($product->purchase_price) }} required>
+                                       value={{$product->purchase_price }} required>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-4 col-xl-3">
@@ -328,7 +297,7 @@
                                 <input type="number" min="0" step="0.01"
                                        placeholder="{{ translate('unit_price') }}"
                                        name="unit_price" class="form-control"
-                                       value={{usdToDefaultCurrency($product->unit_price) }} required>
+                                       value={{$product->unit_price}} required>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-4 col-xl-3" id="minimum_order_qty">
@@ -386,6 +355,23 @@
                         </div>
                         <div class="col-md-6 col-lg-4 col-xl-3">
                             <div class="form-group">
+                                <div class="d-flex gap-2 mb-2">
+                                    <label class="title-color mb-0"
+                                           for="isBattery_Operator">{{ translate('isBattery_Operator') }}</label>
+
+                                    <span class="input-label-secondary cursor-pointer">
+                                        <img src="{{ dynamicAsset(path: 'public/assets/back-end/img/info-circle.svg') }}" alt="">
+                                    </span>
+                                </div>
+
+                                <select class="form-control" name="isbattery_operator" id="discount_type">
+                                    <option value="Battery Operator" {{ $product['isbattery_operator']=='Battery Operator'?'selected':''}}>{{ translate('Battery Operator') }}</option>
+                                    <option value="Non Battery Operator"  {{ $product['isbattery_operator']=='Non Battery Operator'?'selected':''}}>{{ translate('Non Battery Operator') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 col-xl-3">
+                            <div class="form-group">
                                 <div class="d-flex gap-2">
                                     <label class="title-color" for="discount">
                                         {{ translate('discount_amount') }}
@@ -404,7 +390,7 @@
                                        class="form-control" required>
                             </div>
                         </div>
-                      
+
                       <div class="col-md-6 col-lg-4 col-xl-3">
                             <div class="form-group">
                                 <div class="d-flex gap-2 mb-2">
@@ -421,7 +407,7 @@
                                 </select>
                             </div>
                         </div>
-                      
+
                         <div class="col-md-6 col-lg-4 col-xl-3">
                             <div class="form-group">
                                 <div class="d-flex gap-2">
@@ -644,7 +630,7 @@
                 <div class="card-body">
                     <div class="row align-items-end">
                         <div class="col-md-12">
-                          
+
                              @php
                                 $selectedIngredients = [];
                                 if ($product->ingredients_id) {
@@ -956,6 +942,24 @@
                     <input type="text" value="{{ $product['video_url']}}" name="video_url"
                            placeholder="{{ translate('ex').': https://www.youtube.com/embed/5R06LRdUCSE' }}"
                            class="form-control" required>
+                </div>
+
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="title-color mb-0">{{ translate('Upload_pdf') }}</label>
+                        <span class="text-info"> ({{ translate('optional') }}.)</span>
+                    </div>
+                    <input type="text" name="old_pfdfile" value="{{ $product['pdf_doc']}}">
+                    <input type="file" name="pfdfile" class="form-control" id="pdf_input">
+                </div>
+
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="title-color mb-0">{{ translate('Certificat_Upload') }}</label>
+                        <span class="text-info"> ({{ translate('optional') }}.)</span>
+                    </div>
+                    <input type="text" name="old_certificat_names" value="{{ $product['certificate']}}">
+                    <input type="file" name="certificat_names" class="form-control" id="certificat_names">
                 </div>
             </div>
 

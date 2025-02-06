@@ -200,6 +200,9 @@ class ProductController extends Controller
                 $product['average_review'] = 0;
             }
 
+            $product['pdf_doc_path'] = url('public/assets/back-end/product/').'/'.$product->pdf_doc;
+            $product['certificate_path'] = url('public/assets/back-end/product/').'/'.$product->certificate;
+
             $temporary_close = Helpers::get_business_settings('temporary_close');
             $inhouse_vacation = Helpers::get_business_settings('vacation_add');
             $inhouse_vacation_start_date = $product['added_by'] == 'admin' ? $inhouse_vacation['vacation_start_date'] : null;
@@ -642,14 +645,14 @@ class ProductController extends Controller
     public function getReviewList()
     {
         try {
-            
+
             $reviews = Review::select('product_id', 'comment', 'attachment', 'rating')->get();
 
             if ($reviews->isEmpty()) {
                 return response()->json([
                     'status' => false,
                     'data' => [],
-                    'total_reviews' => 0, 
+                    'total_reviews' => 0,
                 ], 200);
             }
 
@@ -661,7 +664,7 @@ class ProductController extends Controller
                 if (is_array($attachments)) {
                     foreach ($attachments as $attachment) {
                         if (isset($attachment['file_name'])) {
-                
+
                             $attachmentUrls[] = url('public/assets/back-end/review/' . $attachment['file_name']);
                         }
                     }
@@ -678,14 +681,14 @@ class ProductController extends Controller
             return response()->json([
                 'status' => true,
                 'data' => $reviewList,
-                'total_reviews' => $reviews->count(), 
+                'total_reviews' => $reviews->count(),
             ], 200);
 
         } catch (\Exception $e) {
-        
+
             Log::error('Error fetching reviews: ' . $e->getMessage());
 
-            
+
             return response()->json([
                 'status' => false,
             ], 500);
