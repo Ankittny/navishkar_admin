@@ -9,6 +9,13 @@ enum Review
         VIEW => 'admin-views.reviews.list'
     ];
 
+    const ADD_REVIEW = [
+        URI => 'add',
+        VIEW => 'admin-views.reviews.add'
+    ];
+
+
+
     const STATUS = [
         URI => 'status/{id}/{status}',
         VIEW => ''
@@ -29,6 +36,11 @@ enum Review
         VIEW => ''
     ];
 
+    const REVIEW = [
+        URI => 'review',
+        VIEW => ''
+    ];
+    
     const EXPORT = [
         URI => 'export',
         VIEW => ''

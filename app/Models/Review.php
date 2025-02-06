@@ -101,7 +101,7 @@ class Review extends Model
     {
         $images = [];
         $value = $this->attachment;
-        if ($value) {
+        if (is_array($value)) {
             foreach ($value as $item) {
                 $item = isset($item['file_name']) ? $item : ['file_name' => $item, 'storage' => 'public'];
                 $images[] = $this->storageLink('review', $item['file_name'], $item['storage'] ?? 'public');
