@@ -48,6 +48,7 @@ class HomeController extends Controller
 
     public function index()
     {
+        return redirect("login/admin");
         $themeName = theme_root_path();
         return match ($themeName) {
             'default' => self::default_theme(),
