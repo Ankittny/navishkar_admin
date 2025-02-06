@@ -577,8 +577,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin']],
             Route::get(Review::SEARCH[URI], 'getCustomerList')->name('customer-list-search');
             Route::any(Review::SEARCH_PRODUCT[URI], 'search')->name('search-product');
             Route::post(Review::REVIEW_REPLY[URI], 'addReviewReply')->name('add-review-reply');
+            Route::get(Review::ADD_REVIEW[URI], 'add_review')->name('add');
+            Route::post(Review::REVIEW[URI], 'store_review')->name('store');
         });
     });
+
+ 
+
 
     // Coupon
     Route::group(['prefix' => 'coupon', 'as' => 'coupon.','middleware'=>['module:promotion_management']], function () {
@@ -1178,6 +1183,7 @@ Route::group(['prefix' => 'bepartnerwith', 'as' => 'bepartnerwith.', 'middleware
     });
 });
 });
+
     
    
 

@@ -797,6 +797,9 @@
                                             <span class="text-truncate">{{translate('customer_List')}} </span>
                                         </a>
                                     </li>
+
+                                   
+                    
                                     <li class="nav-item {{Request::is('admin/reviews*')?'active':''}}">
                                         <a class="nav-link"
                                            href="{{route('admin.reviews.list')}}"
@@ -807,6 +810,22 @@
                                 </span>
                                         </a>
                                     </li>
+
+                                    <a class="nav-link" href="{{ route('admin.reviews.add') }}" title="{{ translate('add_review') }}">
+                                    <span class="tio-circle nav-indicator-icon"></span>
+                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        {{ translate('add_review') }}
+                                    </span>
+                                </a>
+
+                                <a class="nav-link" href="{{ route('admin.reviews.store') }}" title="{{ translate('store_review') }}">
+                                    <span class="tio-circle nav-indicator-icon"></span>
+                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        {{ translate('store_review') }}
+                                    </span>
+                                </a>
+
+
                                     <li class="nav-item {{Request::is('admin/customer/wallet/'.CustomerWallet::REPORT[URI])?'active':''}}">
                                         <a class="nav-link" title="{{translate('wallet')}}"
                                            href="{{route('admin.customer.wallet.report')}}">
@@ -836,6 +855,8 @@
                                     </li>
                                 </ul>
                             </li>
+
+                            
 
                             <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/vendors*') || Request::is('admin/vendors/withdraw-method/*') || (Request::is('admin/orders/details/*') && request()->has('vendor-order-list')) ? 'active' : '' }}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"

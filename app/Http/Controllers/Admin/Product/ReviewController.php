@@ -9,10 +9,13 @@ use App\Contracts\Repositories\CustomerRepositoryInterface;
 use App\Enums\ViewPaths\Admin\Review;
 use App\Exports\CustomerReviewListExport;
 use App\Http\Controllers\BaseController;
+use App\Models\Product;
+use App\Models\Customer;
 use App\Utils\Helpers;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,6 +45,65 @@ class ReviewController extends BaseController
         return $this->getListView($request);
     }
 
+    public function add_review(Request $request): View
+    {
+        $products = $this->productRepo->getListWithScope(
+            searchValue: '', 
+            scope: 'active',
+            relations: ['category', 'brand', 'seller'],
+            dataLimit: 'all'
+        );
+    
+        $customers = $this->customerRepo->getListWhere(
+            searchValue: '', 
+            dataLimit: 'all'
+        );
+    
+        return view(Review::ADD_REVIEW[VIEW], [ 
+            'products' => $products,
+            'customers' => $customers,
+        ]);
+    }
+
+        public function store_review(Request $request)
+        {
+            $request->validate([
+                'product_id' => 'required|exists:products,id',
+                'customer_id' => 'required|exists:users,id',
+                'rating' => 'required|integer|min:1|max:5',
+                'comment' => 'nullable|string',
+                'attachment' => 'nullable|array',
+                'attachment.*' => 'file|mimes:jpg,jpeg,png,gif',
+            ]);
+    
+            $attachments = [];
+            if ($request->hasFile('attachment')) {
+                foreach ($request->file('attachment') as $file) {
+                    $path = $file->store('reviews', 'public');
+                    $attachments[] = [
+                        'file_name' => basename($path),
+                        'storage' => 'public',
+                    ];
+                }
+            }
+    
+            $review = \App\Models\Review::create([
+                'product_id' => $request->product_id,
+                'customer_id' => $request->customer_id,
+                'delivery_man_id' => $request->delivery_man_id,
+                'order_id' => $request->order_id,
+                'comment' => $request->comment,
+                'attachment' => $attachments,
+                'rating' => $request->rating,
+                'status' => 1,
+                'is_saved' => true, 
+            ]);
+    
+            return redirect()->route('admin.reviews.list')->with('success', translate('Review added successfully'));
+        }
+    
+    
+ 
     public function getListView(Request $request): View
     {
         $dates = explode(" - ", $request['from']);
