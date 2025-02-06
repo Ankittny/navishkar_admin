@@ -638,4 +638,59 @@ class ProductController extends Controller
             'products' => $productsList
         ]);
     }
+
+    public function getReviewList()
+    {
+        try {
+            
+            $reviews = Review::select('product_id', 'comment', 'attachment', 'rating')->get();
+
+            if ($reviews->isEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'data' => [],
+                    'total_reviews' => 0, 
+                ], 200);
+            }
+
+            $reviewList = $reviews->map(function ($review) {
+                $attachmentUrls = [];
+
+                $attachments = is_array($review->attachment) ? $review->attachment : json_decode($review->attachment, true);
+
+                if (is_array($attachments)) {
+                    foreach ($attachments as $attachment) {
+                        if (isset($attachment['file_name'])) {
+                
+                            $attachmentUrls[] = url('public/assets/back-end/review/' . $attachment['file_name']);
+                        }
+                    }
+                }
+
+                return [
+                    'product_id' => $review->product_id,
+                    'comment' => $review->comment,
+                    'attachment' => $attachmentUrls,
+                    'rating' => $review->rating,
+                ];
+            });
+
+            return response()->json([
+                'status' => true,
+                'data' => $reviewList,
+                'total_reviews' => $reviews->count(), 
+            ], 200);
+
+        } catch (\Exception $e) {
+        
+            Log::error('Error fetching reviews: ' . $e->getMessage());
+
+            
+            return response()->json([
+                'status' => false,
+            ], 500);
+        }
+    }
 }
+
+
