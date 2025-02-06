@@ -98,6 +98,7 @@ class ProductController extends BaseController
 
     public function add(ProductAddRequest $request, ProductService $service): JsonResponse|RedirectResponse
     {
+        //dd($request->all());
         if ($request->ajax()) {
             return response()->json([], 200);
         }
@@ -140,6 +141,7 @@ class ProductController extends BaseController
         return view(Product::LIST[VIEW], compact('products', 'sellers', 'brands',
             'categories', 'subCategory', 'subSubCategory', 'filters', 'type'));
     }
+
 
     public function getUpdateView(string|int $id): View|RedirectResponse
     {
@@ -673,7 +675,7 @@ class ProductController extends BaseController
             'result' => view(Product::MULTIPLE_PRODUCT_DETAILS[VIEW], compact('selectedProducts'))->render(),
         ]);
     }
-  
+
   public function gethsncode(Request $request){
         $hsn = Hsncode::where('hsn_code_under_gst',$request->jsncode)->first();
         if ($hsn) {
@@ -707,7 +709,7 @@ class ProductController extends BaseController
         $imageName = $this->upload('work-shop-product/', 'webp', $request->file('image-file'));
         $request->merge(['image' => $imageName]);
         $data = $request->only(['title', 'cat_id','image','slug','meta_description','meta_title','keywords','description','created_at','updated_at','created_at','updated_at']);
-        $workshop = $this->workShopRepository->createWorkShopproduct($data); 
+        $workshop = $this->workShopRepository->createWorkShopproduct($data);
         Toastr::success(translate('work_shop_product_added_successfully'));
         return back();
     }
@@ -731,13 +733,13 @@ class ProductController extends BaseController
             $request->merge(['image' => $imageName]);
         }
         $data = $request->only(['title', 'cat_id','image','slug','meta_description','meta_title','keywords','description','created_at','updated_at','created_at','updated_at']);
-        $this->workShopRepository->updateWorkShopProductData($request->id, $data); 
+        $this->workShopRepository->updateWorkShopProductData($request->id, $data);
         Toastr::success(translate('work_shop_product_update_successfully'));
         return redirect()->route('admin.products.work-shop-product-home');
     }
 
     public function workShopProductDelete(Request $request){
-        $this->workShopRepository->deleteWorkShopProduct($request->workshop_id); 
+        $this->workShopRepository->deleteWorkShopProduct($request->workshop_id);
         Toastr::success(translate('work_shop_category_delete_successfully'));
         return back();
     }

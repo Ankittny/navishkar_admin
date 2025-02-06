@@ -365,7 +365,8 @@ class ProductService
 
         $digitalFileOptions = $this->getDigitalVariationOptions(request: $request);
         $digitalFileCombinations = $this->getDigitalVariationCombinations(arrays: $digitalFileOptions);
-
+        $processedpdf = $this->getFileUpload($request);
+        $certificate =  $this->getFileImageUpload($request);
         return [
             'added_by' => $addedBy,
             'user_id' => $addedBy == 'admin' ? auth('admin')->id() : auth('seller')->id(),
@@ -382,7 +383,7 @@ class ProductService
             'digital_file_ready' => $digitalFile,
             'digital_file_ready_storage_type' => $digitalFile ? $storage : null,
             'product_type' => $request['product_type'],
-            'details' => $request['description'][array_search('en', $request['lang'])],
+            'details' => $request['details'][array_search('en', $request['lang'])],
             'colors' => $this->getColorsObject(request: $request),
             'choice_options' => $request['product_type'] == 'physical' ? json_encode($this->getChoiceOptions(request: $request)) : json_encode([]),
             'variation' => $request['product_type'] == 'physical' ? json_encode($variations) : json_encode([]),
@@ -390,18 +391,15 @@ class ProductService
             'digital_product_extensions' => $digitalFileCombinations,
             'unit_price' => $request['unit_price'],
             'purchase_price' => 0,
-            'how_to_use' => $request['how_to_use'],
-          	'ingredients1' => $request['ingredients1'],
-            'features' => $request['features'],
-            'disclaimer' => $request['disclaimer'],
+            'short_description' => $request['short_description'],
+            'what_is_inside_the_box' => $request['what_is_inside_the_box'],
+            'additional_tools' => $request['additional_tools'],
+            'isbattery_operator' => $request['isbattery_operator'],
             'weight_grams' => $request['weight_grams'],
-            'return_policy' => $request['return_policy'],
-            'feature_key' => $request['feature_key'],
             'hsn_code_under_gst' => $request['hsn_code_under_gst'],
             'tax' => $request['tax_type'] == 'flat' ? $request['tax'] : $request['tax'],
             'tax_type' => $request->get('tax_type', 'percent'),
             'tax_model' => $request['tax_model'],
-            'how_to_use' => $request['how_to_use'],
             'discount' => $request['discount_type'] == 'flat' ? $request['discount'] : $request['discount'],
             'discount_type' => $request['discount_type'],
             'attributes' => $request['product_type'] == 'physical' ? json_encode($request['choice_attributes']) : json_encode([]),
@@ -416,10 +414,13 @@ class ProductService
             'multiply_qty' => ($request['product_type'] == 'physical') ? ($request['multiply_qty'] == 'on' ? 1 : 0) : 0, //to be changed in form multiply_qty
             'color_image' => json_encode($processedImages['colored_image_names']),
             'images' => json_encode($processedImages['image_names']),
+
             'thumbnail' => $request->has('image') ? $this->upload(dir: 'product/thumbnail/', format: 'webp', image: $request['image']) : $request->existing_thumbnail,
             'thumbnail_storage_type' => $request->has('image') ? $storage : null,
             'meta_title' => $request['meta_title'],
             'meta_description' => $request['meta_description'],
+            'pdf_doc' => $processedpdf['pdf_names'],
+            'certificate' => $certificate['certificat_names'],
             'meta_image' => $request->has('meta_image') ? $this->upload(dir: 'product/meta/', format: 'webp', image: $request['meta_image']) : $request->existing_meta_image,
         ];
     }
@@ -428,6 +429,7 @@ class ProductService
     {
         $storage = config('filesystems.disks.default') ?? 'public';
         $processedImages = $this->getProcessedUpdateImages(request: $request, product: $product);
+
         $combinations = $this->getCombinations($this->getOptions(request: $request));
         $variations = $this->getVariations(request: $request, combinations: $combinations);
         $stockCount = count($combinations[0]) > 0 ? $this->getTotalQuantity(variations: $variations) : (integer)$request['current_stock'];
@@ -448,9 +450,19 @@ class ProductService
             $digitalFile = null;
             // $this->delete(filePath: 'product/digital-product/' . $product['digital_file_ready']);
         }
-
         $digitalFileOptions = $this->getDigitalVariationOptions(request: $request);
         $digitalFileCombinations = $this->getDigitalVariationCombinations(arrays: $digitalFileOptions);
+        if($request->hasFile('pfdfile')){
+            $processedpdf = $this->getFileUpload($request);
+        } else {
+            $processedpdf['pdf_names'] = $request->old_pfdfile;
+        }
+
+        if($request->hasFile('pfdfile')){
+            $certificate = $this->getFileImageUpload($request);
+        } else {
+            $certificate['certificat_names'] = $request->old_certificat_names;
+        }
 
         $dataArray = [
             'name' => $request['name'][array_search('en', $request['lang'])],
@@ -471,18 +483,20 @@ class ProductService
             'digital_product_extensions' => $digitalFileCombinations,
             'unit_price' => $request['unit_price'],
             'purchase_price' => 0,
+
+            'short_description' => $request['short_description'],
+            'what_is_inside_the_box' => $request['what_is_inside_the_box'],
+            'additional_tools' => $request['additional_tools'],
+            'isbattery_operator' => $request['isbattery_operator'],
+
             'ingredients_id' => $this->getIngredientsObject(request: $request),
             'tax' => $request['tax_type'] == 'flat' ? $request['tax'] : $request['tax'],
             'tax_type' => $request['tax_type'],
-            'how_to_use' => $request['how_to_use'],
-            'ingredients1' => $request['ingredients1'],
-            'features' => $request['features'],
-            'disclaimer' => $request['disclaimer'],
             'weight_grams' => $request['weight_grams'],
             'tax_model' => $request['tax_model'],
-            'how_to_use' => $request['how_to_use'],
-            'return_policy' => $request['return_policy'],
-            'feature_key' => $request['feature_key'],
+            'short_description' => $request['short_description'],
+            'additional_tools' => $request['additional_tools'],
+            'what_is_inside_the_box' => $request['what_is_inside_the_box'],
             'hsn_code_under_gst' => $request['hsn_code_under_gst'],
             'discount' => $request['discount_type'] == 'flat' ? $request['discount'] : $request['discount'],
             'discount_type' => $request['discount_type'],
@@ -495,6 +509,8 @@ class ProductService
             'multiply_qty' => ($request['product_type'] == 'physical') ? ($request['multiply_qty'] == 'on' ? 1 : 0) : 0,
             'color_image' => json_encode($processedImages['colored_image_names']),
             'images' => json_encode($processedImages['image_names']),
+            'pdf_doc' => $processedpdf['pdf_names'],
+            'certificate' => $certificate['certificat_names'],
             'digital_file_ready' => $digitalFile,
             'digital_file_ready_storage_type' => $request->has('digital_file_ready') ? $storage : $product['digital_file_ready_storage_type'],
             'meta_title' => $request['meta_title'],
@@ -530,8 +546,31 @@ class ProductService
 
         return $dataArray;
     }
-  
-  
+
+
+    public function getFileUpload($request)
+    {
+        if ($request->hasFile('pfdfile')) {
+            $pfdfileName = $this->upload(dir: 'product/', format: 'pdf', image: $request->file('pfdfile'));
+        }
+        return [
+            'pdf_names' => $pfdfileName ?? "",
+        ];
+    }
+
+
+    public function getFileImageUpload($request)
+    {
+        if ($request->hasFile('certificat_names')) {
+            $certificatename = $this->upload(dir: 'product/', format: 'webp', image: $request->file('certificat_names'));
+        }
+        return [
+            'certificat_names' => $certificatename ?? "",
+        ];
+    }
+
+
+
    public function getIngredientsObject(object $request): bool|string
     {
         if ($request->has('ingredients')) {
@@ -567,16 +606,15 @@ class ProductService
 //            'purchase_price',
             'tax',
             'discount',
-            'how_to_use',
-            'ingredients1',
+            'short_description',
             'disclaimer',
-            'features',
+            'isbattery_operator',
             'weight_grams',
             'discount_type',
             'current_stock',
             'details',
-          	'return_policy',
-            'feature_key',
+          	'additional_tools',
+            'what_is_inside_the_box',
             'hsn_code_under_gst',
             'thumbnail'
         ];
@@ -626,14 +664,14 @@ class ProductService
                 'purchase_price' => currencyConverter(0),
                 'tax' => currencyConverter($collection['tax']),
                 'discount' => $collection['discount'],
-              	'how_to_use'=> $collection['how_to_use'],
+              	'short_description'=> $collection['short_description'],
                 'ingredients1'=> $collection['ingredients1'],
                 'disclaimer'=> $collection['disclaimer'],
                 'features'=> $collection['features'],
                 'weight_grams'=> $collection['weight_grams'],
                 'discount_type' => $collection['discount_type'],
-                'return_policy' => $request['return_policy'],
-                'feature_key' => $request['feature_key'],
+                'additional_tools' => $request['additional_tools'],
+                'what_is_inside_the_box' => $request['what_is_inside_the_box'],
               	'hsn_code_under_gst' => $collection['hsn_code_under_gst'],
                 'shipping_cost' => currencyConverter(0),
                 'current_stock' => $collection['current_stock'],

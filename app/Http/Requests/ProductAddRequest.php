@@ -43,15 +43,14 @@ class ProductAddRequest extends Request
             'unit_price' => 'required' . '|' . 'numeric' . '|' . 'gt' . ':0',
             'discount' => 'required' . '|' . 'gt' . ':-1',
             'weight_grams' => 'required',
-            'how_to_use' => 'required',
-            // 'ingredients1' => 'required',
-            'features' => 'required',
-            'disclaimer' => 'required',
-            'return_policy'=>'required',
-            'feature_key'=>'required',
+            'additional_tools' => 'required',
+            'what_is_inside_the_box' => 'required',
+            'short_description'=>'required',
             'shipping_cost' => 'required_if' . ':' . 'product_type' . ',==,' . 'physical' . '|' . 'gt' . ':-1',
             'code' => 'required' . '|' . 'regex:/^[a-zA-Z0-9]+$/' . '|' . 'min' . ':6|' . 'max' . ':20|' . 'unique' . ':products',
             'minimum_order_qty' => 'required' . '|' . 'numeric' . '|' . 'min' . ':1',
+            'pfdfile' => 'required|mimes:pdf',
+            'certificat_names' => 'required|mimes:jpeg,jpg,png',
         ];
     }
 
@@ -62,16 +61,18 @@ class ProductAddRequest extends Request
             'category_id' . '.' . 'required' => translate('category_is_required!'),
             'unit' . '.' . 'required_if' => translate('unit_is_required!'),
             'weight_grams' . '.' . 'required_if' => translate('weight_grams_is_required!'),
-            'how_to_use' . '.' . 'required_if' => translate('how_to_use!'),
-            // 'ingredients1.required' => translate('Ingredients are required!'),
-            'features.required' => translate('Features are required!'),
-            'disclaimer.required' => translate('Disclaimer field is optional.'),
+            'pfdfile.required' => translate('pdf_file_is_required!'),
+            'pfdfile.mimes' => translate('pdf_file_must_be_a_file_of_type_pdf!'),
+            'certificat_names.required' => translate('certificat_names_is_required!'),
+            'certificat_names.mimes' => translate('certificat_names_must_be_a_file_of_type_jpeg,jpg,png!'),
+
+
             'code.max' => translate('please_ensure_your_code_does_not_exceed_20_characters'),
             'code.min' => translate('code_with_a_minimum_length_requirement_of_6_characters'),
             'minimum_order_qty' . '.' . 'required' => translate('minimum_order_quantity_is_required!'),
             'minimum_order_qty' . '.' . 'min' => translate('minimum_order_quantity_must_be_positive!'),
-            'return_policy.required' => 'Return policy field is required.',
-            'feature_key.required' => 'Feature key field is required.',
+
+
             // 'digital_file_ready' . '.' . 'required_if' => translate('ready_product_upload_is_required!'),
             // 'digital_file_ready' . '.' . 'mimes' => translate('ready_product_upload_must_be_a_file_of_type') . ':' . 'pdf, zip, jpg, jpeg, png, gif.',
             'digital_product_type' . '.' . 'required_if' => translate('digital_product_type_is_required!'),

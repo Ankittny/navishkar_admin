@@ -113,8 +113,12 @@ class Product extends Model
         'inefficient',
         'disclaimer',
      	'hsn_code_under_gst',
-        'return_policy',
-        'feature_key',
+        'isbattery_operator',
+        'additional_tools',
+        'what_is_inside_the_box',
+        'short_description',
+        'pdf_doc',
+        'certificate'
     ];
 
     /**
