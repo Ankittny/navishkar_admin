@@ -8762,4 +8762,7 @@ return [
 	"certificat_names_is_required!" => "Certificat names is required!",
 	"What_is_inside_the_Box" => "What is inside the Box",
 	"Short_description" => "Short description",
+	"Short_Description" => "Short Description",
+	"pdf_file_must_be_a_file_of_type_pdf!" => "Pdf file must be a file of type pdf!",
+	"pdf_file_is_required!" => "Pdf file is required!",
 ];
