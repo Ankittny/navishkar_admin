@@ -949,7 +949,7 @@
                         <label class="title-color mb-0">{{ translate('Upload_pdf') }}</label>
                         <span class="text-info"> ({{ translate('optional') }}.)</span>
                     </div>
-                    <input type="text" name="old_pfdfile" value="{{ $product['pdf_doc']}}">
+                    <input type="hidden" name="old_pfdfile" value="{{ $product['pdf_doc']}}">
                     <input type="file" name="pfdfile" class="form-control" id="pdf_input">
                 </div>
 
@@ -958,7 +958,7 @@
                         <label class="title-color mb-0">{{ translate('Certificat_Upload') }}</label>
                         <span class="text-info"> ({{ translate('optional') }}.)</span>
                     </div>
-                    <input type="text" name="old_certificat_names" value="{{ $product['certificate']}}">
+                    <input type="hidden" name="old_certificat_names" value="{{ $product['certificate']}}">
                     <input type="file" name="certificat_names" class="form-control" id="certificat_names">
                 </div>
             </div>

@@ -56,10 +56,11 @@
                                 <textarea name="short_description" class="summernote {{ $lang == $defaultLanguage ? 'product-Short_Description-default-language' : '' }}">{{ old('Short_Description') }}</textarea>
                             </div>
                             <div class="form-group pt-2">
+
                                 <label class="title-color" for="{{ $lang }}_description">
                                     {{ translate('description') }} ({{ strtoupper($lang) }})
                                 </label>
-                                <textarea class="summernote {{ $lang == $defaultLanguage ? 'product-details-default-language' : '' }}" name="details">{{ old('details') }}</textarea>
+                                <textarea class="summernote {{ $lang == $defaultLanguage ? 'product-details-default-language' : '' }}" name="description[]">{{ old("description.$lang") }}</textarea>
                             </div>
 
                             <div class="form-group pt-2">

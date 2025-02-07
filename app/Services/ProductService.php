@@ -383,7 +383,7 @@ class ProductService
             'digital_file_ready' => $digitalFile,
             'digital_file_ready_storage_type' => $digitalFile ? $storage : null,
             'product_type' => $request['product_type'],
-            'details' => $request['details'][array_search('en', $request['lang'])],
+            'details' => $request['description'][array_search('en', $request['lang'])],
             'colors' => $this->getColorsObject(request: $request),
             'choice_options' => $request['product_type'] == 'physical' ? json_encode($this->getChoiceOptions(request: $request)) : json_encode([]),
             'variation' => $request['product_type'] == 'physical' ? json_encode($variations) : json_encode([]),
