@@ -48,18 +48,17 @@ class ReviewController extends BaseController
     public function add_review(Request $request): View
     {
         $products = $this->productRepo->getListWithScope(
-            searchValue: '', 
+            searchValue: '',
             scope: 'active',
             relations: ['category', 'brand', 'seller'],
             dataLimit: 'all'
         );
-    
+
         $customers = $this->customerRepo->getListWhere(
-            searchValue: '', 
+            searchValue: '',
             dataLimit: 'all'
         );
-    
-        return view(Review::ADD_REVIEW[VIEW], [ 
+        return view(Review::ADD_REVIEW[VIEW], [
             'products' => $products,
             'customers' => $customers,
         ]);
@@ -75,35 +74,29 @@ class ReviewController extends BaseController
                 'attachment' => 'nullable|array',
                 'attachment.*' => 'file|mimes:jpg,jpeg,png,gif',
             ]);
-    
             $attachments = [];
             if ($request->hasFile('attachment')) {
                 foreach ($request->file('attachment') as $file) {
-                    $path = $file->store('reviews', 'public');
-                    $attachments[] = [
-                        'file_name' => basename($path),
-                        'storage' => 'public',
-                    ];
+                    $fileName = time() . '-' . $file->getClientOriginalName();
+                    $file->move(public_path('assets/back-end/review'), $fileName);
+                    $attachments[] = 'assets/back-end/review/' . $fileName;
                 }
             }
-    
             $review = \App\Models\Review::create([
                 'product_id' => $request->product_id,
                 'customer_id' => $request->customer_id,
                 'delivery_man_id' => $request->delivery_man_id,
                 'order_id' => $request->order_id,
                 'comment' => $request->comment,
-                'attachment' => $attachments,
+                'attachment' => $attachments ? $attachments[0] : null,
                 'rating' => $request->rating,
                 'status' => 1,
-                'is_saved' => true, 
+                'is_saved' => true,
             ]);
-    
+
             return redirect()->route('admin.reviews.list')->with('success', translate('Review added successfully'));
         }
-    
-    
- 
+
     public function getListView(Request $request): View
     {
         $dates = explode(" - ", $request['from']);

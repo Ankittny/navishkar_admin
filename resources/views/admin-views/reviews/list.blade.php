@@ -187,19 +187,14 @@
                                         {{ $review->comment ? Str::limit($review->comment, 35) : translate('no_comment_found') }}
                                     </div>
                                     <br>
-                                    @if(count($review->attachment_full_url) > 0)
-                                        <div class="d-flex flex-wrap gap-1 min-w-200">
-                                            @foreach ($review->attachment_full_url as $img)
-                                                <a href="{{ $img['path'] }}"
-                                                   data-lightbox="mygallery">
-                                                    <img width="60" height="60"
-                                                         class="aspect-1 rounded object-fit-cover"
-                                                         src="{{ getStorageImages(path: $img, type: 'backend-basic') }}"
-                                                         alt="{{translate('image')}}">
-                                                </a>
-                                            @endforeach
-                                        </div>
-                                    @endif
+                                    <a href="{{asset($review->attachment)}}"
+                                    data-lightbox="mygallery">
+                                     <img width="60" height="60"
+                                          class="aspect-1 rounded object-fit-cover"
+                                          src="{{asset("public"."/".$review->attachment)}}"
+                                          alt="{{translate('image')}}">
+                                     </a>
+
                                 </div>
                             </td>
                             <td>
