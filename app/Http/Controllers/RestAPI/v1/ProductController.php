@@ -645,9 +645,7 @@ class ProductController extends Controller
     public function getReviewList()
     {
         try {
-
             $reviews = Review::select('product_id', 'comment', 'attachment', 'rating')->get();
-
             if ($reviews->isEmpty()) {
                 return response()->json([
                     'status' => false,
@@ -656,31 +654,14 @@ class ProductController extends Controller
                 ], 200);
             }
 
-            $reviewList = $reviews->map(function ($review) {
-                $attachmentUrls = [];
-
-                $attachments = is_array($review->attachment) ? $review->attachment : json_decode($review->attachment, true);
-
-                if (is_array($attachments)) {
-                    foreach ($attachments as $attachment) {
-                        if (isset($attachment['file_name'])) {
-
-                            $attachmentUrls[] = url('public/assets/back-end/review/' . $attachment['file_name']);
-                        }
-                    }
-                }
-
-                return [
-                    'product_id' => $review->product_id,
-                    'comment' => $review->comment,
-                    'attachment' => $attachmentUrls,
-                    'rating' => $review->rating,
-                ];
+            $reviews->transform(function ($item) {
+                $item->attachment = url('public/' . $item->attachment);
+                return $item;
             });
 
             return response()->json([
                 'status' => true,
-                'data' => $reviewList,
+                'data' => $reviews,
                 'total_reviews' => $reviews->count(),
             ], 200);
 
