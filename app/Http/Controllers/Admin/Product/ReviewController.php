@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -173,6 +174,25 @@ class ReviewController extends BaseController
             'status' => $request['status'],
         ]);
     }
+
+    public function delete($id): JsonResponse|RedirectResponse
+    {
+        $this->deleteReview($id);
+    
+        if (request()->ajax()) {
+            return response()->json(['message' => translate('review_removed')]);
+        }
+    
+        Toastr::success(translate('review_removed'));
+        return back();
+    }
+    
+    private function deleteReview($id): void
+    {
+        $review = \App\Models\Review::findOrFail($id);
+        $review->delete();
+    }
+    
 
     public function updateStatus(Request $request): RedirectResponse|JsonResponse
     {
