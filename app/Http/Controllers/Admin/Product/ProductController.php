@@ -687,7 +687,7 @@ class ProductController extends BaseController
 
     public function workShopProductHome(Request $request): View
     {
-        $workshopcat = WorkShopCategory::select('id','name','meta_title')->get();
+        $workshopcat = WorkShopCategory::select('id','title','meta_title')->get();
         $query = WorkShopProduct::select('*');
         if($request->searchValue){
             $query->where('title', 'like', '%' . $request->searchValue . '%')

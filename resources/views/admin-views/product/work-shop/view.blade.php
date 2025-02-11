@@ -33,7 +33,7 @@
                                         @foreach($languages as $lang)
                                             <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : ''}} form-system-language-form" id="{{ $lang}}-form">
                                                 <label class="title-color">{{ translate('Title') }}<span class="text-danger">*</span> ({{strtoupper($lang) }})</label>
-                                                <input type="text" name="title" class="form-control category-title-name" placeholder="{{ translate('new_Category') }}">
+                                                <input type="text" name="title" class="form-control category-title-name" placeholder="{{ translate('new_product') }}">
                                             </div>
                                             <input type="hidden" name="lang[]" value="{{ $lang}}">
                                         @endforeach
