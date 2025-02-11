@@ -13,12 +13,12 @@
         <div class="coupon-info">
             <div class="coupon-info-item">
                 <span>{{translate('minimum_purchase')}} :</span>
-                <strong id="min_purchase">{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $coupon->min_purchase), currencyCode: getCurrencyCode())  }}</strong>
+                <strong id="min_purchase">{{ setCurrencySymbol(amount: $coupon->min_purchase) }}</strong>
             </div>
             @if($coupon->coupon_type != 'free_delivery' && $coupon->discount_type == 'percentage')
             <div class="coupon-info-item" id="max_discount_modal_div">
                 <span>{{translate('maximum_discount')}} : </span>
-                <strong id="max_discount">{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $coupon->max_discount), currencyCode: getCurrencyCode()) }}</strong>
+                <strong id="max_discount">{{ setCurrencySymbol(amount: $coupon->max_discount) }}</strong>
             </div>
             @endif
             <div class="coupon-info-item">
@@ -48,7 +48,7 @@
             @else
                 <div class="d-flex">
                     <h4 id="discount">
-                        {{$coupon->discount_type=='amount' ? setCurrencySymbol(amount: usdToDefaultCurrency(amount: $coupon->discount), currencyCode: getCurrencyCode()) : $coupon->discount.'%'}}
+                        {{ $coupon->discount_type == 'amount' ? setCurrencySymbol(amount: $coupon->discount) : $coupon->discount . '%' }}
                     </h4>
                 </div>
 

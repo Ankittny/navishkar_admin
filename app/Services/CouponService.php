@@ -23,10 +23,10 @@ class CouponService
             'seller_id' => $addedBy == 'seller' ? auth('seller')->id() : null,
             'customer_id' => $request['customer_id'],
             'limit' => $request['limit'],
-            'min_purchase' => currencyConverter(amount: $request['min_purchase']),
+            'min_purchase' => $request['min_purchase'],
             'discount_type' => $request['coupon_type'] == 'discount_on_purchase' ? $request['discount_type'] : 'amount',
-            'discount' => $request['coupon_type'] == 'discount_on_purchase' ? ($request['discount_type'] == 'amount' ? currencyConverter(amount: $request['discount']) : $request['discount']) : 0,
-            'max_discount' => $request['coupon_type'] == 'discount_on_purchase' && $request['discount_type'] == 'percentage' ? currencyConverter(amount: $request['max_discount'] != null ? $request['max_discount'] : $request['discount']) : 0,
+            'discount' => $request['coupon_type'] == 'discount_on_purchase' ? ($request['discount_type'] == 'amount' ? $request['discount'] : $request['discount']) : 0,
+            'max_discount' => $request['coupon_type'] == 'discount_on_purchase' && $request['discount_type'] == 'percentage' ? $request['max_discount'] ?? $request['discount'] : 0,
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -41,7 +41,7 @@ class CouponService
             'start_date' => $request['start_date'],
             'expire_date' => $request['expire_date'],
             'status' => 1,
-            'min_purchase' => currencyConverter(amount: $request['min_purchase']),
+            'min_purchase' => $request['min_purchase'],
         ];
 
         if ($request['coupon_type'] == 'discount_on_purchase' || $request['coupon_type'] == 'free_delivery') {
@@ -57,8 +57,8 @@ class CouponService
             $data += [
                 'discount_type' => $request['discount_type'],
                 'customer_id' => 0,
-                'discount' => $request['discount_type'] == 'amount' ? currencyConverter(amount: $request['discount']) : $request['discount'],
-                'max_discount' => currencyConverter(amount: $request['max_discount'] != null ? $request['max_discount'] : $request['discount']),
+                'discount' => $request['discount_type'] == 'amount' ? $request['discount'] : $request['discount'],
+                'max_discount' => $request['max_discount'] != null ? $request['max_discount'] : $request['discount'],
             ];
         }
 
@@ -74,7 +74,7 @@ class CouponService
             'start_date' => $request['start_date'],
             'expire_date' => $request['expire_date'],
             'status' => 1,
-            'min_purchase' => currencyConverter(amount: $request['min_purchase']),
+            'min_purchase' => $request['min_purchase'],
         ];
         if ($request['coupon_type'] == 'discount_on_purchase' || $request['coupon_type'] == 'free_delivery') {
             $data += [
@@ -98,8 +98,8 @@ class CouponService
             $data += [
                 'discount_type' => $request['discount_type'],
                 'customer_id' => 0,
-                'discount' => $request['discount_type'] == 'amount' ? currencyConverter($request['discount']) : $request['discount'],
-                'max_discount' => currencyConverter($request['max_discount'] != null ? $request['max_discount'] : $request['discount']),
+                'discount' => $request['discount_type'] == 'amount' ? $request['discount'] : $request['discount'],
+                'max_discount' => $request['max_discount'] != null ? $request['max_discount'] : $request['discount'],
             ];
         }
 
