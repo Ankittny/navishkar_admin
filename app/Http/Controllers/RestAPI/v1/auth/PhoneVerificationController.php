@@ -318,6 +318,7 @@ class PhoneVerificationController extends Controller
             if(!empty($user->f_name) && !empty($user->l_name) && !empty($user->email)){
                 return response()->json([
                     'status' => true,
+                    'id' => $user->id,
                     'message' => translate('otp_verified'),
                     'token' => $token,
                     'profile_status' => true
