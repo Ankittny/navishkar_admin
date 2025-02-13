@@ -77,7 +77,6 @@ class Helpers
 
         } elseif (is_object($request) && method_exists($request, 'user')) {
             $user = $request->user() ?? $request->user; //for api
-
         } elseif (isset($request['payment_request_from']) && in_array($request['payment_request_from'], ['app']) && !isset($request->user)){
             $user = $request['is_guest'] ? 'offline' : User::find($request['customer_id']);
 
@@ -359,7 +358,7 @@ class Helpers
         }
         return null;
     }
-  
+
   public static function delevery_currency_converter($amount)
     {
         $currency_model = Helpers::get_business_settings('currency_model');
