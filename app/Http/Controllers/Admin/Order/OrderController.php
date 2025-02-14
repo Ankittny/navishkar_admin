@@ -131,7 +131,6 @@ class OrderController extends BaseController
 
         $vendorId = $request['seller_id'];
         $customerId = $request['customer_id'];
-
         return view(Order::LIST[VIEW], compact(
             'orders',
             'searchValue',
@@ -301,6 +300,7 @@ class OrderController extends BaseController
         $order = $this->orderRepo->getFirstWhere(params: ['id' => $id], relations: ['seller', 'shipping', 'details']);
         $vendor = $this->vendorRepo->getFirstWhere(params: ['id' => $order['details']->first()->seller_id]);
         $invoiceSettings = json_decode(json: $this->businessSettingRepo->getFirstWhere(params: ['type'=>'invoice_settings'])?->value);
+       // dd(Order::GENERATE_INVOICE[VIEW]);
         $mpdf_view = PdfView::make(Order::GENERATE_INVOICE[VIEW],
             compact('order', 'vendor', 'companyPhone', 'companyEmail', 'companyName', 'companyWebLogo','invoiceSettings')
         );
@@ -392,8 +392,8 @@ class OrderController extends BaseController
         }
         return response()->json($request['order_status']);
     }
-  
-  
+
+
   	public function cancelWaybill(Request $request){
         $order = OrderCancel::where('id',$request->id)->first();
         $client = new Client();
@@ -590,7 +590,7 @@ class OrderController extends BaseController
             'data' => ['new_order' => $newOrder]
         ]);
     }
-  
+
   	public function return_cancel(Request $request)
     {
         $orderDetail = OrderDetail::find($request->dataId);
@@ -616,7 +616,7 @@ class OrderController extends BaseController
             ], 404);
         }
     }
-  
+
   	public function cancelWaybill2(Request $request){
         $order = OrderDetail::where('id',$request->dataId)->first();
         $client = new Client();
@@ -648,7 +648,7 @@ class OrderController extends BaseController
             ], 500);
         }
     }
-  
+
   	public function printslip(Request $request)
     {
         $client = new Client();
@@ -673,7 +673,7 @@ class OrderController extends BaseController
             ], 500);
         }
     }
-  
+
   	public function hnbinvoice(Request $request, $order_id, $detail_id){
         $companyPhone = getWebConfig(name: 'company_phone');
         $companyEmail = getWebConfig(name: 'company_email');

@@ -229,7 +229,7 @@
                                     <td>
                                         <div>
                                             @php($orderTotalPriceSummary = \App\Utils\OrderManager::getOrderTotalPriceSummary(order: $order))
-                                            {{ setCurrencySymbol(amount: usdToDefaultCurrency(amount:  $orderTotalPriceSummary['totalAmount']), currencyCode: getCurrencyCode()) }}
+                                            {{ setCurrencySymbol(amount:  $orderTotalPriceSummary['totalAmount'], currencyCode: getCurrencyCode()) }}
                                         </div>
 
                                         @if($order->payment_status == 'paid')
