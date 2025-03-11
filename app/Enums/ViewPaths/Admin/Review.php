@@ -45,4 +45,10 @@ enum Review
         URI => 'export',
         VIEW => ''
     ];
+
+    const DELETE = [
+        URI => 'delete',
+        VIEW => ''
+    ];
+   
 }

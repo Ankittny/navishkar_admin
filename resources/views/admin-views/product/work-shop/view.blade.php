@@ -58,7 +58,7 @@
                                             <label class="title-color">{{ translate('meta_discription') }} ({{strtoupper($lang) }})</label>
                                             <textarea name="meta_description" class="form-control" placeholder="{{ translate('description_placeholder') }}"></textarea>
                                         </div>
-                                        <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : ''}} form-system-language-form" id="{{ $lang}}-form">
+                             <div class="form-group {{ $lang != $defaultLanguage ? 'd-none' : ''}} form-system-language-form" id="{{ $lang}}-form">
                                             <label class="title-color">{{ translate('Keywords') }} ({{strtoupper($lang) }})</label>
                                             <input type="text" name="keywords" class="form-control" placeholder="{{ translate('keywords') }}">
                                         </div>
@@ -67,6 +67,9 @@
                                             <label class="title-color">{{ translate('work_shop_category') }} ({{ strtoupper($lang) }})</label>
                                             <select class="form-control" name="cat_id" id="dropdown">
                                                 <option>Select Work Shop Category</option>
+                                  
+       
+
                                                 @foreach($workshopcat as $cat)
                                                     <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                                                 @endforeach

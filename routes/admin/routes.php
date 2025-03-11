@@ -579,7 +579,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin']],
             Route::post(Review::REVIEW_REPLY[URI], 'addReviewReply')->name('add-review-reply');
             Route::get(Review::ADD_REVIEW[URI], 'add_review')->name('add');
             Route::post(Review::REVIEW[URI], 'store_review')->name('store');
-        });
+            Route::delete(Review::DELETE[URI].'/{id}', 'delete')->name('delete');
+        });     
     });
 
  

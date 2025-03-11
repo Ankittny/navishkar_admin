@@ -38,6 +38,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Models\Hsncode;
 use App\Models\WorkShopProduct;
 use App\Models\WorkShopCategory;
+use Illuminate\Support\Str;
 class ProductController extends BaseController
 {
     protected $workShopRepository;
@@ -687,11 +688,11 @@ class ProductController extends BaseController
 
     public function workShopProductHome(Request $request): View
     {
-        $workshopcat = WorkShopCategory::select('id','title','meta_title')->get();
+        $workshopcat = WorkShopCategory::select('id','name','meta_title')->get();
         $query = WorkShopProduct::select('*');
         if($request->searchValue){
             $query->where('title', 'like', '%' . $request->searchValue . '%')
-            ->orWhere('description', 'like', '%' . $request->searchValue . '%') // Search by category description
+            ->orWhere('description', 'like', '%' . $request->searchValue . '%') 
               ->orWhere('meta_title', 'like', '%' . $request->searchValue . '%');
          }
         $product = $query->paginate(10);
@@ -705,38 +706,53 @@ class ProductController extends BaseController
         ]);
     }
 
-    public function workShopProductAdd(Request $request){
+    
+    
+    public function workShopProductAdd(Request $request) {
         $imageName = $this->upload('work-shop-product/', 'webp', $request->file('image-file'));
         $request->merge(['image' => $imageName]);
-        $data = $request->only(['title', 'cat_id','image','slug','meta_description','meta_title','keywords','description','created_at','updated_at','created_at','updated_at']);
+    
+        $slug = Str::slug($request->title);
+        $count = 1;
+        while (WorkShopProduct::where('slug', $slug)->exists()) {
+            $slug = Str::slug($request->title) . '-' . $count;
+            $count++;
+        }
+        $request->merge(['slug' => $slug]);
+    
+        $data = $request->only(['title', 'cat_id', 'image', 'slug', 'meta_description', 'meta_title', 'keywords', 'description', 'created_at', 'updated_at']);
         $workshop = $this->workShopRepository->createWorkShopproduct($data);
+    
         Toastr::success(translate('work_shop_product_added_successfully'));
         return back();
     }
+    
 
-    public function workShopGetUpdatePproduct(Request $request){
-        $workshopcat = WorkShopCategory::select('id','name','meta_title')->get();
-        $products = $this->workShopRepository->findWorkShopProductById($request->id);
-        $languages = getWebConfig(name: 'pnc_language') ?? null;
-        $defaultLanguage = $languages[0];
-        return view(Product::WORKSHOPUPDATEPRODUCT[VIEW], [
-            'product' => $products,
-            'languages' => $languages,
-            'defaultLanguage' => $defaultLanguage,
-            'workshopcat'=>$workshopcat
-        ]);
-    }
-
-    public function workShopProductUpdateData(Request $request){
-        if($request->file('image-file')){
+    public function workShopGetUpdatePproduct(Request $request) {
+        if ($request->file('image-file')) {
             $imageName = $this->upload('work-shop-product/', 'webp', $request->file('image-file'));
             $request->merge(['image' => $imageName]);
         }
-        $data = $request->only(['title', 'cat_id','image','slug','meta_description','meta_title','keywords','description','created_at','updated_at','created_at','updated_at']);
+    
+        $product = $this->workShopRepository->findWorkShopProductById($request->id);
+        $slug = Str::slug($request->title);
+        
+        if ($product->slug !== $slug) {
+            $count = 1;
+            while (WorkShopProduct::where('slug', $slug)->where('id', '!=', $request->id)->exists()) {
+                $slug = Str::slug($request->title) . '-' . $count;
+                $count++;
+            }
+            $request->merge(['slug' => $slug]);
+        }
+    
+        $data = $request->only(['title', 'cat_id', 'image', 'slug', 'meta_description', 'meta_title', 'keywords', 'description', 'created_at', 'updated_at']);
         $this->workShopRepository->updateWorkShopProductData($request->id, $data);
+    
         Toastr::success(translate('work_shop_product_update_successfully'));
         return redirect()->route('admin.products.work-shop-product-home');
     }
+    
 
     public function workShopProductDelete(Request $request){
         $this->workShopRepository->deleteWorkShopProduct($request->workshop_id);
