@@ -8765,4 +8765,9 @@ return [
 	"Short_Description" => "Short Description",
 	"pdf_file_must_be_a_file_of_type_pdf!" => "Pdf file must be a file of type pdf!",
 	"pdf_file_is_required!" => "Pdf file is required!",
+	"ex:10" => "Ex:10",
+	"select_Vendor" => "Select Vendor",
+	"all_Vendor" => "All Vendor",
+	"select_vendor_is_required" => "Select vendor is required",
+	"coupon_updated_successfully" => "Coupon updated successfully",
 ];

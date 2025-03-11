@@ -110,6 +110,7 @@
                                     @endif
 
                                     <div class="payment-status d-flex justify-content-sm-end gap-10">
+                                        {{$order['payment_status']}}
                                         <span class="title-color">{{translate('payment_Status')}}:</span>
                                         @if($order['payment_status']=='paid')
                                             <span class="text-success payment-status-span font-weight-bold">
@@ -180,7 +181,7 @@
                                                         </div>
                                                         <div>
                                                             <strong>{{translate('unit_price')}} :</strong>
-                                                            {{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $detail['price'] + ($detail->tax_model =='include' ? ($detail['tax'] / $detail['qty']) :0))) }}
+                                                            {{ setCurrencySymbol($detail['price'] + ($detail->tax_model =='include' ? ($detail['tax'] / $detail['qty']) :0)) }}
                                                             @if ($detail->tax_model =='include')
                                                                 ({{translate('tax_incl.')}})
                                                             @else
@@ -202,7 +203,7 @@
                                                                     {{translate('Tracking Id')}} :
                                                                 </strong>
                                                                 <a target="_blank" href="https://www.delhivery.com/track/package/{{$detail['third_party_delivery_tracking_id']}}"> {{$detail['third_party_delivery_tracking_id']}}</a>
-                     										    
+
                                                             </div>
                                                    <div>
                                                       <a class="btn btn-link" onclick="myFunction({{$detail['third_party_delivery_tracking_id']}})" return false;>
@@ -217,7 +218,7 @@
                                                         </form>
                                                       @endif
                                                     </div>
-                                                
+
 
                                                 @if(isset($productDetails->digital_product_type) && $productDetails->digital_product_type == 'ready_after_sell')
                                                     <button type="button" class="btn btn-sm btn--primary mt-2"
@@ -228,14 +229,14 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                {{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $detail['price']*$detail['qty']), currencyCode: getCurrencyCode()) }}
+                                                {{ setCurrencySymbol(amount: $detail['price']*$detail['qty'], currencyCode: getCurrencyCode()) }}
                                             </td>
                                             <td>
-                                                {{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $detail['tax']), currencyCode: getCurrencyCode()) }}
+                                                {{ setCurrencySymbol($detail['tax'], currencyCode: getCurrencyCode()) }}
                                             </td>
-                                            <td>{{setCurrencySymbol(amount: usdToDefaultCurrency(amount: $detail['discount']), currencyCode: getCurrencyCode())}}</td>
+                                            <td>{{setCurrencySymbol($detail['discount'], currencyCode: getCurrencyCode())}}</td>
                                             @php($subtotal=$detail['price']*$detail['qty']+$detail['tax']-$detail['discount'])
-                                            <td>{{setCurrencySymbol(amount: usdToDefaultCurrency(amount: $subtotal), currencyCode: getCurrencyCode())}}</td>
+                                            <td>{{setCurrencySymbol($subtotal, currencyCode: getCurrencyCode())}}</td>
                                           <td>
                                             <select class="form-control orderAction_delivery_status" name="delivery_status" data-id="{{$detail['id']}}" data-third_party_delivery_tracking_id-id="{{$detail['third_party_delivery_tracking_id']}}">
                                                 <option value="">Please select</option>
@@ -324,16 +325,16 @@
                                 <dl class="row gy-1 text-sm-right">
                                     <dt class="col-5">{{translate('item_price')}}</dt>
                                     <dd class="col-6 title-color">
-                                        <strong>{{setCurrencySymbol(amount: usdToDefaultCurrency(amount: $orderTotalPriceSummary['itemPrice']), currencyCode: getCurrencyCode())}}</strong>
+                                        <strong>{{setCurrencySymbol(amount: $orderTotalPriceSummary['itemPrice'], currencyCode: getCurrencyCode())}}</strong>
                                     </dd>
                                     <dt class="col-5 text-capitalize">{{translate('item_discount')}}</dt>
                                     <dd class="col-6 title-color">
-                                        -
-                                        <strong>{{setCurrencySymbol(amount: usdToDefaultCurrency(amount: $orderTotalPriceSummary['itemDiscount']), currencyCode: getCurrencyCode())}}</strong>
+
+                                        <strong>{{setCurrencySymbol(amount: $orderTotalPriceSummary['itemDiscount'], currencyCode: getCurrencyCode())}}</strong>
                                     </dd>
                                     <dt class="col-5 text-capitalize">{{translate('sub_total')}}</dt>
                                     <dd class="col-6 title-color">
-                                        <strong>{{setCurrencySymbol(amount: usdToDefaultCurrency(amount: $orderTotalPriceSummary['subTotal']), currencyCode: getCurrencyCode())}}</strong>
+                                        <strong>{{ setCurrencySymbol(amount: $orderTotalPriceSummary['subTotal'], currencyCode: getCurrencyCode()) }}</strong>
                                     </dd>
                                     <dt class="col-5 text-nowrap">
                                         {{translate('coupon_discount')}}
@@ -341,11 +342,11 @@
                                         {{(!in_array($order['coupon_code'], [0, NULL]) ? '('.translate('expense_bearer_').($order['coupon_discount_bearer']=='inhouse' ? 'admin' : ($order['coupon_discount_bearer'] =='seller'? 'vendor' : $order['coupon_discount_bearer'])).')': '' )}}
                                     </dt>
                                     <dd class="col-6 title-color">
-                                        -<strong>{{setCurrencySymbol(amount: usdToDefaultCurrency(amount: $orderTotalPriceSummary['couponDiscount']), currencyCode: getCurrencyCode())}}</strong>
+                                        -<strong>{{setCurrencySymbol($orderTotalPriceSummary['couponDiscount'], currencyCode: getCurrencyCode())}}</strong>
                                     </dd>
                                     <dt class="col-5 text-uppercase">{{translate('vat')}}/{{translate('tax')}}</dt>
                                     <dd class="col-6 title-color">
-                                        <strong>{{setCurrencySymbol(amount: usdToDefaultCurrency(amount: $orderTotalPriceSummary['taxTotal']), currencyCode: getCurrencyCode())}}</strong>
+                                        <strong>{{setCurrencySymbol($orderTotalPriceSummary['taxTotal'], currencyCode: getCurrencyCode())}}</strong>
                                     </dd>
                                     <dt class="col-5 text-capitalize">
                                         {{translate('delivery_fee')}}
@@ -353,12 +354,12 @@
                                         {{($order['is_shipping_free'] ? '('.translate('expense_bearer_').($order['free_delivery_bearer'] == 'seller' ? 'vendor' : $order['free_delivery_bearer']).')': '' )}}
                                     </dt>
                                     <dd class="col-6 title-color">
-                                        <strong>{{setCurrencySymbol(amount: usdToDefaultCurrency(amount: $orderTotalPriceSummary['shippingTotal']), currencyCode: getCurrencyCode())}}</strong>
+                                        <strong>{{setCurrencySymbol($orderTotalPriceSummary['shippingTotal'], currencyCode: getCurrencyCode())}}</strong>
                                     </dd>
 
                                     <dt class="col-5"><strong>{{translate('total')}}</strong></dt>
                                     <dd class="col-6 title-color">
-                                        <strong>{{ setCurrencySymbol(amount: usdToDefaultCurrency(amount: $orderTotalPriceSummary['totalAmount']), currencyCode: getCurrencyCode())}}</strong>
+                                        <strong>{{ setCurrencySymbol($orderTotalPriceSummary['totalAmount'], currencyCode: getCurrencyCode())}}</strong>
                                     </dd>
                                 </dl>
                             </div>

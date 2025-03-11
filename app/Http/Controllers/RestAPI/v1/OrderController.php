@@ -87,7 +87,7 @@ class OrderController extends Controller
         }
 
         if ($user == 'offline' && $request->has('address_id') && $request['address_id']) {
-            $shippingAddress = ShippingAddress::where(['customer_id' => $request['guest_id'], 'is_guest' => 1, 'id' => $request->input('address_id')])->first();
+            $shippingAddress = ShippingAddress::where(['customer_id' => $request['guest_id'], 'is_guest' => 0, 'id' => $request->input('address_id')])->first();
             if ($request['is_check_create_account'] && $shippingAddress) {
                 if (User::where(['email' => $shippingAddress['email']])->orWhere(['phone' => $shippingAddress['phone']])->first()) {
                     return response()->json(['message' => translate('Already_registered ')], 403);
@@ -137,10 +137,10 @@ class OrderController extends Controller
         $orderIds = [];
         foreach ($cartGroupIds as $groupId) {
             $data = [
-                'payment_method' => 'cash_on_delivery',
+                'payment_method' => 'Razor pay',
                 'order_status' => 'pending',
-                'payment_status' => 'unpaid',
-                'transaction_ref' => '',
+                'payment_status' => $request->payment_status,
+                'transaction_ref' => $request->payment_id,
                 'order_group_id' => $getUniqueId,
                 'cart_group_id' => $groupId,
                 'request' => $request,
