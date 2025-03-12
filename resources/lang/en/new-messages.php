@@ -8755,8 +8755,6 @@ return [
 	"new-messages.pdf_file_must_be_a_file_of_type_pdf!" => "New-messages.pdf file must be a file of type pdf!",
 	"new-messages.certificat_names_must_be_a_file_of_type_jpeg,jpg,png!" => "New-messages.certificat names must be a file of type jpeg jpg png!",
 	"certificat_names_must_be_a_file_of_type_jpeg,jpg,png!" => "Certificat names must be a file of type jpeg jpg png!",
-	"offline_Payment_allows_customers_to_use_external_payment_methods._They_must_share_payment_details_with_the_vendor_afterward._Admin_can_set_whether_customers_can_make_offline_payments_by_enabling/disabling_this_button.
-                                            " => "Offline Payment allows customers to use external payment methods. They must share payment details with the vendor afterward. Admin can set whether customers can make offline payments by enabling/disabling this button. ",
 	"show_3+_rated_products" => "Show 3+ rated products",
 	"Additional_Tools" => "Additional Tools",
 	"certificat_names_is_required!" => "Certificat names is required!",
@@ -8770,4 +8768,5 @@ return [
 	"all_Vendor" => "All Vendor",
 	"select_vendor_is_required" => "Select vendor is required",
 	"coupon_updated_successfully" => "Coupon updated successfully",
+	"Workshop product updated successfully!" => "Workshop product updated successfully!",
 ];

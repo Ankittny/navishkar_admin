@@ -162,7 +162,7 @@
                                 <th>{{ translate('title') }}</th>
                                 <th class="text-center">{{ translate('image') }}</th>
                                 <th class="text-center">{{ translate('meta_title') }}</th>
-                                <th class="text-center">{{ translate('keywords') }}</th>
+                                <!-- <th class="text-center">{{ translate('keywords') }}</th> -->
                                 <th class="text-center">{{ translate('action') }}</th>
                             </tr>
                             </thead>
@@ -179,7 +179,7 @@
                                     <td class="text-center">
                                         {{ $category['meta_title'] }}
                                     </td>
-                                    <td>{{$category['keywords']}}</td>
+                                    <!-- <td>{{$category['keywords']}}</td> -->
                                     <td>
                                         <div class="d-flex justify-content-center gap-10">
                                             <a class="btn btn-outline-info btn-sm square-btn "
