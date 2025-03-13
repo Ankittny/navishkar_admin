@@ -18,7 +18,7 @@
                 {{translate('environment_information')}}
             </h5>
         </div>
-        <div class="card-body">
+        {{-- <div class="card-body">
             <form action="{{route('admin.business-settings.web-config.environment-setup')}}" method="post"
                     enctype="multipart/form-data">
                 @csrf
@@ -139,7 +139,7 @@
                         class="btn btn--primary px-5 {{env('APP_MODE')!='demo'?'':'call-demo'}}">{{translate('submit')}}</button>
                 </div>
             </form>
-        </div>
+        </div> --}}
     </div>
 </div>
 @endsection

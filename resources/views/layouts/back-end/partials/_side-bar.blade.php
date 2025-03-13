@@ -730,7 +730,7 @@
                                     </span>
                                         </a>
                                     </li>
-                                    <li class="nav-item {{Request::is('admin/report/vendor-report')?'active':''}}">
+                                    {{-- <li class="nav-item {{Request::is('admin/report/vendor-report')?'active':''}}">
                                         <a class="nav-link" href="{{route('admin.report.vendor-report')}}"
                                            title="{{translate('vendor_Sales')}}">
                                             <span class="tio-circle nav-indicator-icon"></span>
@@ -738,7 +738,7 @@
                                         {{translate('vendor_Sales')}}
                                     </span>
                                         </a>
-                                    </li>
+                                    </li> --}}
                                     <li class="navbar-vertical-aside-has-menu {{(Request::is('admin/transaction/order-transaction-list') || Request::is('admin/transaction/expense-transaction-list') || Request::is('admin/transaction/refund-transaction-list') || Request::is('admin/report/transaction/'.App\Enums\ViewPaths\Admin\RefundTransaction::INDEX[URI]) || Request::is('admin/transaction/wallet-bonus'))?'active':''}}">
                                         <a class="js-navbar-vertical-aside-menu-link nav-link"
                                            href="{{route('admin.transaction.order-transaction-list')}}"
@@ -901,7 +901,7 @@
                                 </ul>
                             </li> --}}
 
-                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/delivery-man*')?'active':''}}">
+                            {{-- <li class="navbar-vertical-aside-has-menu {{Request::is('admin/delivery-man*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle text-capitalize"
                                    href="javascript:" title="{{translate('delivery_men')}}">
                                     <i class="tio-user nav-icon"></i>
@@ -942,7 +942,7 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
 
                             @if(auth('admin')->user()->admin_role_id==1)
                                 <li class="navbar-vertical-aside-has-menu {{(Request::is('admin/employee*') || Request::is('admin/custom-role*'))?'active':''}}">
@@ -1333,7 +1333,7 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/vendor-registration-settings/*')?'active':''}}">
+                                    {{-- <li class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/vendor-registration-settings/*')?'active':''}}">
                                         <a class="js-navbar-vertical-aside-menu-link nav-link"
                                            href="{{route('admin.business-settings.vendor-registration-settings.index')}}"
                                            title="{{translate('vendor_Registration')}}">
@@ -1342,7 +1342,7 @@
                                                 {{translate('vendor_Registration')}}
                                             </span>
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </li>
 

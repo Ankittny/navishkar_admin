@@ -8769,4 +8769,5 @@ return [
 	"select_vendor_is_required" => "Select vendor is required",
 	"coupon_updated_successfully" => "Coupon updated successfully",
 	"Workshop product updated successfully!" => "Workshop product updated successfully!",
+	"by_Turning_OFF_Cookie_Settings" => "By Turning OFF Cookie Settings",
 ];
