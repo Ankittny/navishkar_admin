@@ -308,7 +308,7 @@
                                 </ul>
                             </li>
                             <li class="navbar-vertical-aside-has-menu">
-                                <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+                                <a class="js-navbar-vertical-aside-menu-link nav-link "
                                    href="{{route('admin.products.work-shop-product-home')}}" title="{{translate('work_shop_product')}}">
                                     <i class="tio-filter-list nav-icon"></i>
                                     <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
@@ -387,7 +387,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/products/'.Product::LIST[URI].'/vendor*')||(Request::is('admin/products/'.\App\Enums\ViewPaths\Admin\Product::VIEW[URI].'/vendor/*'))||Request::is('admin/products/'.\App\Enums\ViewPaths\Admin\Product::UPDATED_PRODUCT_LIST[URI])?'active':''}}">
+                            {{-- <li class="navbar-vertical-aside-has-menu {{Request::is('admin/products/'.Product::LIST[URI].'/vendor*')||(Request::is('admin/products/'.\App\Enums\ViewPaths\Admin\Product::VIEW[URI].'/vendor/*'))||Request::is('admin/products/'.\App\Enums\ViewPaths\Admin\Product::UPDATED_PRODUCT_LIST[URI])?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
                                    href="javascript:"
                                    title="{{translate('vendor_Products')}}">
@@ -448,7 +448,7 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin/products/'.Product::PRODUCT_GALLERY[URI])?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
                                    href="{{route('admin.products.product-gallery')}}"
@@ -674,7 +674,7 @@
                                 </a>
                             </li>
 
-                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/be-partner-with*')?'active':''}}">
+                            {{-- <li class="navbar-vertical-aside-has-menu {{Request::is('admin/be-partner-with*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
                                    href="{{route('admin.bepartnerwith.list')}}"
                                    title="{{translate('Be_partner_with')}}">
@@ -689,7 +689,7 @@
                                 </span>
                             </span>
                                 </a>
-                            </li>
+                            </li> --}}
                         </li>
 
                         @endif
@@ -798,8 +798,8 @@
                                         </a>
                                     </li>
 
-                                   
-                    
+
+
                                     <li class="nav-item {{Request::is('admin/reviews*')?'active':''}}">
                                         <a class="nav-link"
                                            href="{{route('admin.reviews.list')}}"
@@ -856,8 +856,8 @@
                                 </ul>
                             </li>
 
-                            
 
+{{--
                             <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/vendors*') || Request::is('admin/vendors/withdraw-method/*') || (Request::is('admin/orders/details/*') && request()->has('vendor-order-list')) ? 'active' : '' }}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
                                    href="javascript:" title="{{translate('vendors')}}">
@@ -899,7 +899,7 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
 
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin/delivery-man*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle text-capitalize"
@@ -984,7 +984,7 @@
                                 </a>
                             </li>
                         @endif
-                        
+
                         @if(Helpers::module_permission_check('blogs'))
                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/notification*') ||  Request::is('admin/push-notification/*')  ?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
