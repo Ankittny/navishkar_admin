@@ -290,7 +290,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin']],
             Route::post(Order::HNBINVOICE[URI] . '/{order_id}/{primary_id}', 'hnbinvoice')->name('hnbinvoice');
         });
     });
-  
+
 
     Route::group(['prefix' => 'hsn', 'as' => 'hsn.'], function () {
           Route::controller(HsnController::class)->group(function () {
@@ -301,7 +301,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin']],
                Route::post(Hsn::DEL[URI], 'delete')->name('delete');
           });
     });
-  
+
     // Attribute
     Route::group(['prefix' => 'attribute', 'as' => 'attribute.','middleware'=>['module:product_management']], function () {
         Route::controller(AttributeController::class)->group(function (){
@@ -580,10 +580,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['admin']],
             Route::get(Review::ADD_REVIEW[URI], 'add_review')->name('add');
             Route::post(Review::REVIEW[URI], 'store_review')->name('store');
             Route::delete(Review::DELETE[URI].'/{id}', 'delete')->name('delete');
-        });     
+        });
     });
 
- 
+
 
 
     // Coupon
@@ -1173,20 +1173,20 @@ Route::group(['prefix' => 'innovationenquiry', 'as' => 'innovationenquiry.', 'mi
         Route::get(InnovationEnquiry::LIST[URI], 'list')->name('list');
         Route::post('store', 'store')->name('store');
         Route::get(InnovationEnquiry::DELETE[URI] . '/{id}', 'delete')->name('delete');
-        
+
     });
 });
 //BePartnerWith
-Route::group(['prefix' => 'bepartnerwith', 'as' => 'bepartnerwith.', 'middleware' => ['module:product_management']], function () {
-    Route::controller(BePartnerWithController::class)->group(function () {
-        Route::get(BePartnerWith::LIST[URI], 'list')->name('list');
-        Route::get(BePartnerWith::DELETE[URI] . '/{id}', 'delete')->name('delete');
+    Route::group(['prefix' => 'bepartnerwith', 'as' => 'bepartnerwith.', 'middleware' => ['module:product_management']], function () {
+        Route::controller(BePartnerWithController::class)->group(function () {
+            Route::get('list', 'list')->name('list');
+            Route::get('delete/{id}', 'delete')->name('delete');
+        });
     });
 });
-});
 
-    
-   
+
+
 
 
 

@@ -8,14 +8,9 @@ enum BePartnerWith
         URI => 'list',
         VIEW => 'admin-views.bepartnerwith.list'
     ];
-   
-   
-     
     const DELETE = [
         URI => 'delete',
         VIEW => ''
     ];
 
-    
-   
 }
