@@ -519,7 +519,7 @@ class CustomerController extends Controller
 
     public function update_address(Request $request): JsonResponse
     {
-      
+
         $shipping_address = ShippingAddress::where(['customer_id' => $request->user()->id, 'id' => $request->id])->first();
         if (!$shipping_address) {
             return response()->json(['message' => translate('not_found')], 200);
@@ -535,7 +535,7 @@ class CustomerController extends Controller
         }
 
         $user = Helpers::get_customer($request);
-        
+
         $shipping_address->update([
             'customer_id' => $user == 'offline' ? $request->guest_id : $user->id,
             'is_guest' => $user == 'offline' ? 1 : 0,
@@ -570,13 +570,12 @@ class CustomerController extends Controller
 
         $shipping_address = ShippingAddress::where(['id' => $request['address_id']])
             ->when($user == 'offline', function ($query) use ($request) {
-                $query->where(['
-                ' => $request->guest_id, 'is_guest' => 1]);
+                $query->where(['customer_id' => $request->guest_id, 'is_guest' => 1]);
             })
             ->when($user != 'offline', function ($query) use ($user) {
                 $query->where(['customer_id' => $user->id, 'is_guest' => '0']);
             })->first();
-
+        //dd($shipping_address);
         if ($shipping_address && $shipping_address->delete()) {
             return response()->json(['message' => 'successfully removed!'], 200);
         }
