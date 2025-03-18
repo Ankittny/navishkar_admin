@@ -575,7 +575,7 @@ class CustomerController extends Controller
             ->when($user != 'offline', function ($query) use ($user) {
                 $query->where(['customer_id' => $user->id, 'is_guest' => '0']);
             })->first();
-        //dd($shipping_address);
+
         if ($shipping_address && $shipping_address->delete()) {
             return response()->json(['message' => 'successfully removed!'], 200);
         }
