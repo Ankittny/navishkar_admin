@@ -674,7 +674,7 @@
                                 </a>
                             </li>
 
-                            {{-- <li class="navbar-vertical-aside-has-menu {{Request::is('admin/be-partner-with*')?'active':''}}">
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/be-partner-with*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
                                    href="{{route('admin.bepartnerwith.list')}}"
                                    title="{{translate('Be_partner_with')}}">
@@ -689,7 +689,7 @@
                                 </span>
                             </span>
                                 </a>
-                            </li> --}}
+                            </li>
                         </li>
 
                         @endif
